@@ -18,17 +18,24 @@
       --danger:#ff6b6b;
       --success:#64d98b;
     }
+
     *{box-sizing:border-box}
-    html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC",Arial,sans-serif}
-    
-    /* Left-anchored whole-interface scaling */
+
+    html,body{
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC",Arial,sans-serif;
+    }
+
     body{
       min-height:100vh;
-      margin:0;
       padding:0;
       overflow:auto;
       background:var(--bg);
     }
+
+    /* 永遠以左側為基準縮放 */
     .viewport-fit{
       position:relative;
       width:390px;
@@ -37,6 +44,7 @@
       padding:0;
       overflow:visible;
     }
+
     .scale-stage{
       width:390px;
       margin:0;
@@ -44,6 +52,7 @@
       transform-origin:top left;
       will-change:transform;
     }
+
     .app{
       width:390px;
       margin:0;
@@ -53,6 +62,7 @@
     }
 
     button{font:inherit;color:inherit}
+
     .glass-shell{
       border:1px solid var(--border);
       border-radius:24px;
@@ -61,6 +71,7 @@
       -webkit-backdrop-filter:blur(20px) saturate(155%);
       box-shadow:inset 0 1px 0 rgba(255,255,255,.09),0 12px 32px rgba(0,0,0,.18);
     }
+
     .glass-btn{
       position:relative;
       min-height:44px;
@@ -76,24 +87,32 @@
       transition:transform .16s ease,border-color .16s ease,background .16s ease;
       cursor:pointer;
     }
+
     .glass-btn::before{
-      content:"";position:absolute;left:14px;right:14px;top:5px;height:34%;
-      border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,0));
-      pointer-events:none
+      content:"";
+      position:absolute;
+      left:14px;right:14px;top:5px;height:34%;
+      border-radius:999px;
+      background:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,0));
+      pointer-events:none;
     }
+
     .glass-btn:active{transform:scale(.98)}
     .glass-btn.active,.primary{
       border-color:rgba(74,142,255,.8);
-      background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.05)),var(--accent-bg)
+      background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.05)),var(--accent-bg);
     }
     .glass-btn:disabled{opacity:.35;cursor:not-allowed;transform:none}
+
     .topbar{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
     .brand{font-size:clamp(20px,5.6vw,30px);font-weight:800;letter-spacing:-.03em}
     .subtitle{color:var(--muted);font-size:13px;margin-top:4px}
     .lang-switch{display:inline-flex;padding:4px;border-radius:999px}
     .lang{min-height:38px;padding:0 14px}
+
     .styles{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
     .style-btn{border-radius:18px;min-height:44px;padding:0 10px;font-size:.88rem}
+
     .letter-card{padding:12px}
     .letter-main{display:flex;align-items:center;justify-content:space-between;gap:16px}
     .nav{width:48px;height:48px;padding:0;font-size:1.65rem;line-height:1}
@@ -102,500 +121,588 @@
     .letter-display{font-size:46px;line-height:1;font-weight:700;margin-top:5px}
     .letter-display.cursive{
       font-family:"Snell Roundhand","Apple Chancery","Segoe Script","Brush Script MT",cursive;
-      font-size:66px;font-weight:500
+      font-size:66px;
+      font-weight:500;
     }
+
     .count{margin-top:8px;font-size:14px;color:var(--muted)}
     .alphabet{display:flex;gap:8px;overflow-x:auto;padding-top:16px;padding-bottom:2px;scrollbar-width:thin}
     .alpha{min-width:46px;height:40px;flex:0 0 auto;padding:0 10px;font-size:.88rem}
     .alpha.cursive{
       font-family:"Snell Roundhand","Apple Chancery","Segoe Script","Brush Script MT",cursive;
-      font-size:1.55rem;font-weight:500
+      font-size:1.55rem;
+      font-weight:500;
     }
+
     .modes{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
     .mode{width:100%;min-height:46px;border-radius:18px;padding:0 8px;font-size:.86rem}
+
     .practice{padding:12px;display:flex;flex-direction:column;align-items:center}
     .practice > .title,.practice > .status,.practice > .feedback-row{width:100%}
     .practice > .status{margin-bottom:2px}
     .stroke-controls,.board{align-self:center}
     .title{font-size:16px;font-weight:700}
     .status{color:var(--muted);font-size:14px;margin-top:4px}
-    .stroke-controls{display:flex;justify-content:center;gap:6px;flex-wrap:nowrap;margin:12px 0;width:100%}
-    .stroke-control{min-width:0;flex:1 1 0;min-height:42px;padding:0 8px;font-size:.82rem}
-    .board{
-      position:relative;width:min(330px,100%);aspect-ratio:1/1;margin:0 auto;overflow:hidden;border-radius:20px;
-      border:1px solid var(--border);background:var(--panel2);touch-action:none
+
+    .stroke-controls{
+      display:flex;
+      justify-content:center;
+      gap:6px;
+      flex-wrap:nowrap;
+      margin:12px 0;
+      width:100%;
     }
+
+    .stroke-control{min-width:0;flex:1 1 0;min-height:42px;padding:0 8px;font-size:.82rem}
+
+    .board{
+      position:relative;
+      width:min(330px,100%);
+      aspect-ratio:1/1;
+      margin:0 auto;
+      overflow:hidden;
+      border-radius:20px;
+      border:1px solid var(--border);
+      background:var(--panel2);
+      touch-action:none;
+    }
+
     .board svg,.board canvas{position:absolute;inset:0;width:100%;height:100%}
     .feedback-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:14px}
     .feedback{font-size:14px;min-height:22px}
     .clear{min-height:42px;padding:0 14px}
     .footer-note{text-align:center;color:var(--muted);font-size:12px;padding:6px 0 12px}
-    
-      .styles{grid-template-columns:repeat(2,1fr)}
-      .nav{width:64px;height:64px}
-      .letter-display{font-size:60px}
-      .letter-display.cursive{font-size:72px}
-    }
-    
-      .alpha{min-width:62px}
-      .mode{font-size:.92rem}
-    }
-  
-    
-    }
-  
-    
-      .board{width:350px}
-      .brand{font-size:28px}
-      .letter-display{font-size:50px}
-      .letter-display.cursive{font-size:62px}
-      .alpha{min-width:50px}
-    }
-    
-      .styles{grid-template-columns:repeat(4,1fr)}
-      .board{width:390px}
-      .style-btn{min-height:46px;font-size:.9rem}
-      .mode{min-height:48px;font-size:.9rem}
-      .stroke-control{min-height:44px;font-size:.86rem}
-      .nav{width:52px;height:52px;font-size:1.75rem}
-      .letter-display{font-size:54px}
-      .letter-display.cursive{font-size:66px}
-    }
-    
-      .board{width:420px}
-      .brand{font-size:30px}
-      .style-btn{min-height:48px;font-size:.92rem}
-      .mode{min-height:50px;font-size:.92rem}
-      .stroke-control{min-height:46px;font-size:.88rem}
-      .nav{width:56px;height:56px;font-size:1.85rem}
-      .letter-display{font-size:58px}
-      .letter-display.cursive{font-size:72px}
-    }
-
   </style>
 </head>
+
 <body>
-  <div id="viewportFit" class="viewport-fit"><div id="scaleStage" class="scale-stage"><main class="app" id="app">
-    <section class="topbar">
-      <div>
-        <div class="brand" id="brandTitle">英文字母書寫練習</div>
-        <div class="subtitle" id="brandSubtitle">印刷體、草寫、大小寫與筆順練習</div>
-      </div>
-      <div class="glass-shell lang-switch">
-        <button type="button" class="glass-btn lang active" data-lang="zh">中文</button>
-        <button type="button" class="glass-btn lang" data-lang="en">English</button>
-      </div>
-    </section>
+  <div id="viewportFit" class="viewport-fit">
+    <div id="scaleStage" class="scale-stage">
+      <main class="app" id="app">
+        <section class="topbar">
+          <div>
+            <div class="brand" id="brandTitle">英文字母書寫練習</div>
+            <div class="subtitle" id="brandSubtitle">印刷體、草寫、大小寫與筆順練習</div>
+          </div>
+          <div class="glass-shell lang-switch">
+            <button type="button" class="glass-btn lang active" data-lang="zh">中文</button>
+            <button type="button" class="glass-btn lang" data-lang="en">English</button>
+          </div>
+        </section>
 
-    <section class="styles">
-      <button type="button" class="glass-btn style-btn active" data-style="printUpper">印刷體大寫</button>
-      <button type="button" class="glass-btn style-btn" data-style="printLower">印刷體小寫</button>
-      <button type="button" class="glass-btn style-btn" data-style="cursiveUpper">草寫大寫</button>
-      <button type="button" class="glass-btn style-btn" data-style="cursiveLower">草寫小寫</button>
-    </section>
+        <section class="styles">
+          <button type="button" class="glass-btn style-btn active" data-style="printUpper">印刷體大寫</button>
+          <button type="button" class="glass-btn style-btn" data-style="printLower">印刷體小寫</button>
+          <button type="button" class="glass-btn style-btn" data-style="cursiveUpper">草寫大寫</button>
+          <button type="button" class="glass-btn style-btn" data-style="cursiveLower">草寫小寫</button>
+        </section>
 
-    <section class="glass-shell letter-card">
-      <div class="letter-main">
-        <button id="prevLetter" class="glass-btn nav" type="button" aria-label="上一個字母">‹</button>
-        <div class="center">
-          <div id="currentLabel" class="current-label">目前字母</div>
-          <div id="letterDisplay" class="letter-display">A</div>
-          <div id="strokeCount" class="count">3 筆</div>
-        </div>
-        <button id="nextLetter" class="glass-btn nav" type="button" aria-label="下一個字母">›</button>
-      </div>
-      <div id="alphabet" class="alphabet"></div>
-    </section>
+        <section class="glass-shell letter-card">
+          <div class="letter-main">
+            <button id="prevLetter" class="glass-btn nav" type="button" aria-label="上一個字母">‹</button>
+            <div class="center">
+              <div id="currentLabel" class="current-label">目前字母</div>
+              <div id="letterDisplay" class="letter-display">A</div>
+              <div id="strokeCount" class="count">3 筆</div>
+            </div>
+            <button id="nextLetter" class="glass-btn nav" type="button" aria-label="下一個字母">›</button>
+          </div>
+          <div id="alphabet" class="alphabet"></div>
+        </section>
 
-    <section class="modes">
-      <button type="button" class="glass-btn mode active" data-mode="watch">看筆順</button>
-      <button type="button" class="glass-btn mode" data-mode="trace">跟著寫</button>
-      <button type="button" class="glass-btn mode" data-mode="free">自己寫</button>
-    </section>
+        <section class="modes">
+          <button type="button" class="glass-btn mode active" data-mode="watch">看筆順</button>
+          <button type="button" class="glass-btn mode" data-mode="trace">跟著寫</button>
+          <button type="button" class="glass-btn mode" data-mode="free">自己寫</button>
+        </section>
 
-    <section class="glass-shell practice">
-      <div class="title" id="modeTitle">看筆順</div>
-      <div class="status" id="modeStatus">用下方按鍵逐筆查看或播放全部。</div>
+        <section class="glass-shell practice">
+          <div class="title" id="modeTitle">看筆順</div>
+          <div class="status" id="modeStatus">用下方按鍵逐筆查看或播放全部。</div>
 
-      <div class="stroke-controls">
-        <button id="prevStroke" class="glass-btn stroke-control" type="button">上一筆</button>
-        <button id="playAll" class="glass-btn stroke-control primary" type="button">播放全部</button>
-        <button id="nextStroke" class="glass-btn stroke-control" type="button">下一筆</button>
-      </div>
+          <div class="stroke-controls">
+            <button id="prevStroke" class="glass-btn stroke-control" type="button">上一筆</button>
+            <button id="playAll" class="glass-btn stroke-control primary" type="button">播放全部</button>
+            <button id="nextStroke" class="glass-btn stroke-control" type="button">下一筆</button>
+          </div>
 
-      <div class="board">
-        <svg viewBox="0 0 600 600" aria-label="字母練習區">
-          <line x1="35" y1="80" x2="565" y2="80" stroke="rgba(255,255,255,.12)" stroke-width="2"/>
-          <line x1="35" y1="295" x2="565" y2="295" stroke="rgba(255,255,255,.12)" stroke-width="2" stroke-dasharray="8 8"/>
-          <line x1="35" y1="510" x2="565" y2="510" stroke="rgba(255,255,255,.12)" stroke-width="3"/>
-          <g id="guides"></g><g id="demo"></g><g id="markers"></g>
-        </svg>
-        <canvas id="canvas" width="600" height="600"></canvas>
-      </div>
+          <div class="board">
+            <svg viewBox="0 0 600 600" aria-label="字母練習區">
+              <line x1="35" y1="80" x2="565" y2="80" stroke="rgba(255,255,255,.12)" stroke-width="2"/>
+              <line x1="35" y1="295" x2="565" y2="295" stroke="rgba(255,255,255,.12)" stroke-width="2" stroke-dasharray="8 8"/>
+              <line x1="35" y1="510" x2="565" y2="510" stroke="rgba(255,255,255,.12)" stroke-width="3"/>
+              <g id="guides"></g>
+              <g id="demo"></g>
+              <g id="markers"></g>
+            </svg>
+            <canvas id="canvas" width="600" height="600"></canvas>
+          </div>
 
-      <div class="feedback-row">
-        <div id="feedback" class="feedback" aria-live="polite">準備好了。</div>
-        <button id="clearBtn" class="glass-btn clear" type="button">清除重寫</button>
-      </div>
-    </section>
+          <div class="feedback-row">
+            <div id="feedback" class="feedback" aria-live="polite">準備好了。</div>
+            <button id="clearBtn" class="glass-btn clear" type="button">清除重寫</button>
+          </div>
+        </section>
 
-    <div class="footer-note" id="footerNote">書寫練習會檢查起筆位置、方向、順序與完整度。</div>
-  </main></div></div>
+        <div class="footer-note" id="footerNote">書寫練習會檢查起筆位置、方向、順序與完整度。</div>
+      </main>
+    </div>
+  </div>
 
-<script>
-(() => {
-  const root = document.getElementById('app');
-  const ABC = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-  const S = d => ({d});
+  <!-- 正式印刷體 52 字母筆順資料庫 -->
+  <script src="qletter-print-strokes-v1.js"></script>
 
-  const text = {
-    zh:{
-      brand:'英文字母書寫練習',
-      subtitle:'印刷體、草寫、大小寫與筆順練習',
-      printUpper:'印刷體大寫', printLower:'印刷體小寫',
-      cursiveUpper:'草寫大寫', cursiveLower:'草寫小寫',
-      watch:'看筆順', trace:'跟著寫', free:'自己寫',
-      current:'目前字母', prev:'上一筆', play:'播放全部', next:'下一筆',
-      clear:'清除重寫', ready:'準備好了。',
-      stroke:n=>n+' 筆',
-      watchStatus:'用下方按鍵逐筆查看或播放全部。',
-      traceStatus:'沿著提示完整書寫，系統會監督起筆、方向、順序與完整度。',
-      freeStatus:'提示淡化，但仍會監督起筆、方向、順序與完整度。',
-      done:l=>'✓ '+l+' 完成。',
-      sDone:n=>'✓ 第 '+n+' 筆完成。',
-      wrongStart:'✕ 起筆位置錯誤。',
-      wrongDir:'✕ 書寫方向錯誤。',
-      wrongEnd:'✕ 沒有到達正確終點。',
-      incomplete:'✕ 筆畫沒有完整寫完。',
-      footer:'書寫練習會檢查起筆位置、方向、順序與完整度。'
-    },
-    en:{
-      brand:'English Letter Writing Practice',
-      subtitle:'Print, cursive, uppercase, lowercase, and stroke-order practice',
-      printUpper:'Print Uppercase', printLower:'Print Lowercase',
-      cursiveUpper:'Cursive Uppercase', cursiveLower:'Cursive Lowercase',
-      watch:'Stroke Order', trace:'Trace', free:'Write by Yourself',
-      current:'Current Letter', prev:'Previous Stroke', play:'Play All', next:'Next Stroke',
-      clear:'Clear & Retry', ready:'Ready.',
-      stroke:n=>n+(n===1?' stroke':' strokes'),
-      watchStatus:'Use the buttons below to view each stroke or play all strokes.',
-      traceStatus:'Trace the guide. Starting point, direction, order, and completeness are checked.',
-      freeStatus:'The guide is faded, but starting point, direction, order, and completeness are still checked.',
-      done:l=>'✓ '+l+' completed.',
-      sDone:n=>'✓ Stroke '+n+' completed.',
-      wrongStart:'✕ Incorrect starting point.',
-      wrongDir:'✕ Incorrect stroke direction.',
-      wrongEnd:'✕ The stroke did not reach the correct endpoint.',
-      incomplete:'✕ The stroke is incomplete.',
-      footer:'Writing practice checks starting point, direction, order, and completeness.'
-    }
-  };
+  <script>
+  (() => {
+    const ABC = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+    const S = d => ({d});
 
-  const printUpper={
-    A:[S('M300 85 L150 510'),S('M300 85 L450 510'),S('M215 325 L385 325')],
-    B:[S('M160 85 L160 510'),S('M160 85 C390 75 420 175 390 260 C360 305 270 305 160 305'),S('M160 305 C410 290 435 420 385 485 C350 515 260 510 160 510')],
-    C:[S('M455 145 C405 85 295 65 215 115 C125 170 105 370 205 465 C280 535 405 505 460 445')],
-    D:[S('M155 85 L155 510'),S('M155 85 C390 80 470 180 470 295 C470 425 375 510 155 510')],
-    E:[S('M155 85 L155 510'),S('M155 85 L430 85'),S('M155 295 L370 295'),S('M155 510 L430 510')],
-    F:[S('M155 85 L155 510'),S('M155 85 L435 85'),S('M155 295 L370 295')],
-    G:[S('M460 160 C420 90 310 65 220 110 C120 160 105 370 195 460 C270 535 405 510 465 430 L465 325 L340 325')],
-    H:[S('M155 85 L155 510'),S('M445 85 L445 510'),S('M155 295 L445 295')],
-    I:[S('M300 85 L300 510')],
-    J:[S('M430 85 L430 390 C430 500 350 525 285 495 C245 475 225 435 225 395')],
-    K:[S('M155 85 L155 510'),S('M440 85 L155 325'),S('M280 220 L455 510')],
-    L:[S('M155 85 L155 510'),S('M155 510 L450 510')],
-    M:[S('M120 85 L120 510'),S('M120 85 L300 320'),S('M480 85 L300 320'),S('M480 85 L480 510')],
-    N:[S('M145 85 L145 510'),S('M145 85 L455 510'),S('M455 85 L455 510')],
-    O:[S('M300 80 C165 80 120 180 120 300 C120 425 180 515 300 515 C420 515 480 425 480 300 C480 175 420 80 300 80 Z')],
-    P:[S('M155 85 L155 510'),S('M155 85 C405 65 430 190 385 255 C350 300 260 300 155 300')],
-    Q:[S('M300 80 C165 80 120 180 120 300 C120 425 180 515 300 515 C420 515 480 425 480 300 C480 175 420 80 300 80 Z'),S('M340 405 L475 535')],
-    R:[S('M155 85 L155 510'),S('M155 85 C405 65 430 190 385 255 C350 300 260 300 155 300'),S('M300 300 L455 510')],
-    S:[S('M445 145 C395 80 260 70 190 135 C115 205 175 275 285 300 C405 325 470 375 420 450 C365 530 220 525 155 450')],
-    T:[S('M100 85 L500 85'),S('M300 85 L300 510')],
-    U:[S('M145 85 L145 365 C145 465 205 515 300 515 C395 515 455 465 455 365 L455 85')],
-    V:[S('M120 85 L300 510'),S('M480 85 L300 510')],
-    W:[S('M90 85 L190 510'),S('M300 260 L190 510'),S('M300 260 L410 510'),S('M510 85 L410 510')],
-    X:[S('M125 85 L475 510'),S('M475 85 L125 510')],
-    Y:[S('M120 85 L300 300'),S('M480 85 L300 300'),S('M300 300 L300 510')],
-    Z:[S('M120 85 L480 85'),S('M480 85 L120 510'),S('M120 510 L480 510')]
-  };
-
-  const printLower={
-    a:[S('M365 275 C330 230 245 220 195 275 C140 335 165 445 245 470 C320 492 385 430 385 350 C385 290 355 245 300 240'),S('M385 245 L385 470')],
-    b:[S('M180 80 L180 470'),S('M180 300 C210 245 265 225 320 245 C395 270 425 350 400 415 C375 480 285 500 230 450 C195 420 180 375 180 330')],
-    c:[S('M405 280 C365 225 270 220 210 270 C145 325 155 420 220 465 C275 502 360 485 405 435')],
-    d:[S('M390 80 L390 470'),S('M365 275 C330 230 245 220 195 275 C140 335 165 445 245 470 C320 492 390 430 390 350')],
-    e:[S('M190 345 L405 345 C395 260 335 225 270 235 C185 245 155 330 175 400 C195 475 295 495 390 435')],
-    f:[S('M360 105 C315 70 245 85 225 150 C210 200 225 390 220 510'),S('M155 275 L345 275')],
-    g:[S('M365 275 C330 230 245 220 195 275 C140 335 165 445 245 470 C320 492 390 430 390 350'),S('M390 245 L390 500 C390 565 345 590 285 575')],
-    h:[S('M175 80 L175 470'),S('M175 340 C195 255 250 225 310 245 C365 265 380 310 380 365 L380 470')],
-    i:[S('M285 245 L285 470'),S('M285 155 L285 160')],
-    j:[S('M330 245 L330 500 C330 565 290 590 235 570'),S('M330 155 L330 160')],
-    k:[S('M180 80 L180 470'),S('M390 235 L180 355'),S('M275 300 L405 470')],
-    l:[S('M290 80 L290 470')],
-    m:[S('M145 245 L145 470'),S('M145 335 C165 265 215 235 260 250 C300 265 310 305 310 350 L310 470'),S('M310 340 C330 265 380 235 425 250 C465 265 475 305 475 350 L475 470')],
-    n:[S('M175 245 L175 470'),S('M175 340 C200 260 255 230 315 250 C365 268 380 315 380 370 L380 470')],
-    o:[S('M300 230 C205 230 165 295 165 360 C165 430 210 480 300 480 C390 480 435 430 435 360 C435 295 395 230 300 230 Z')],
-    p:[S('M180 245 L180 575'),S('M180 330 C205 260 255 230 315 245 C395 265 425 350 400 415 C375 480 285 500 230 450 C195 420 180 375 180 330')],
-    q:[S('M365 275 C330 230 245 220 195 275 C140 335 165 445 245 470 C320 492 390 430 390 350'),S('M390 245 L390 575')],
-    r:[S('M190 245 L190 470'),S('M190 340 C205 270 250 235 315 245 C345 250 365 265 380 285')],
-    s:[S('M395 275 C350 225 250 225 205 275 C160 325 220 350 300 370 C380 390 420 420 385 460 C340 510 225 495 180 450')],
-    t:[S('M285 145 L285 430 C285 470 315 485 350 465'),S('M210 265 L365 265')],
-    u:[S('M180 245 L180 390 C180 455 225 480 280 465 C335 450 365 405 365 345 L365 245'),S('M365 245 L365 470')],
-    v:[S('M170 245 L290 470'),S('M415 245 L290 470')],
-    w:[S('M120 245 L205 470'),S('M300 300 L205 470'),S('M300 300 L395 470'),S('M480 245 L395 470')],
-    x:[S('M185 245 L410 470'),S('M410 245 L185 470')],
-    y:[S('M170 245 L290 455'),S('M415 245 L285 510 C260 555 235 580 200 575')],
-    z:[S('M175 245 L415 245'),S('M415 245 L175 470'),S('M175 470 L420 470')]
-  };
-
-  const cursiveUpper = {};
-  const cursiveLower = {};
-
-  // 草寫目前採用獨立的書寫路徑資料骨架。
-  // 為避免以一般字型輪廓冒充筆順，未完成的字母先使用單一練習路徑，
-  // 後續可以逐字替換成正式教學版本。
-  ABC.forEach((L,i)=>{
-    const x = 165 + (i%3)*12;
-    cursiveUpper[L] = [S(`M${x} 500 C${x-15} 360 ${x+20} 210 ${x+70} 100 C${x+130} 180 ${x+150} 330 ${x+120} 500`)];
-    cursiveLower[L.toLowerCase()] = [S(`M${x} 465 C${x+20} 300 ${x+85} 235 ${x+145} 285 C${x+190} 335 ${x+170} 430 ${x+115} 465`)];
-  });
-
-  let lang='zh', style='printUpper', mode='watch', idx=0, strokeIndex=0, points=[], drawing=false, timer=null;
-  const guides=document.getElementById('guides');
-  const demo=document.getElementById('demo');
-  const markers=document.getElementById('markers');
-  const canvas=document.getElementById('canvas');
-  const ctx=canvas.getContext('2d');
-
-  const label=()=>style.endsWith('Lower')?ABC[idx].toLowerCase():ABC[idx];
-  function data(){
-    const sets={printUpper,printLower,cursiveUpper,cursiveLower};
-    return sets[style][label()];
-  }
-  const isCursive=()=>style.startsWith('cursive');
-
-  function centerGlyphGroups(){
-    const allPaths=[...guides.querySelectorAll('path'), ...demo.querySelectorAll('path')];
-    if(!allPaths.length) return;
-    let minX=Infinity,maxX=-Infinity;
-    allPaths.forEach(p=>{
-      const b=p.getBBox();
-      if(!isFinite(b.x)) return;
-      minX=Math.min(minX,b.x);
-      maxX=Math.max(maxX,b.x+b.width);
-    });
-    if(!isFinite(minX)||!isFinite(maxX)) return;
-    const currentCenter=(minX+maxX)/2;
-    const dx=300-currentCenter;
-    [guides,demo,markers].forEach(g=>g.setAttribute('transform', `translate(${dx} 0)`));
-  }
-
-  function svgEl(tag,a){
-    const e=document.createElementNS('http://www.w3.org/2000/svg',tag);
-    Object.entries(a||{}).forEach(([k,v])=>e.setAttribute(k,v));
-    return e;
-  }
-  const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
-
-  function scene(){
-    guides.innerHTML=''; demo.innerHTML=''; markers.innerHTML='';
-    data().forEach((s,i)=>{
-      const g=svgEl('path',{
-        d:s.d,fill:'none',stroke:'rgba(255,255,255,.55)',
-        'stroke-width':isCursive()?'14':'18',
-        'stroke-linecap':'round','stroke-linejoin':'round',
-        opacity:mode==='free'?'.035':'.16'
-      });
-      guides.appendChild(g);
-
-      const p=svgEl('path',{
-        d:s.d,fill:'none',stroke:'var(--accent)',
-        'stroke-width':isCursive()?'14':'18',
-        'stroke-linecap':'round','stroke-linejoin':'round',
-        opacity:mode==='watch'&&i===strokeIndex?'1':'0'
-      });
-      demo.appendChild(p);
-
-      if(i===strokeIndex && mode!=='free'){
-        const q=g.getPointAtLength(0);
-        markers.appendChild(svgEl('circle',{cx:q.x,cy:q.y,r:'13',fill:'var(--accent)'}));
-        const tx=svgEl('text',{x:q.x+20,y:q.y+6,fill:'white','font-size':'21','font-weight':'700'});
-        tx.textContent=String(i+1); markers.appendChild(tx);
+    const text = {
+      zh:{
+        brand:'英文字母書寫練習',
+        subtitle:'印刷體、草寫、大小寫與筆順練習',
+        printUpper:'印刷體大寫', printLower:'印刷體小寫',
+        cursiveUpper:'草寫大寫', cursiveLower:'草寫小寫',
+        watch:'看筆順', trace:'跟著寫', free:'自己寫',
+        current:'目前字母', prev:'上一筆', play:'播放全部', next:'下一筆',
+        clear:'清除重寫', ready:'準備好了。',
+        stroke:n=>n+' 筆',
+        watchStatus:'用下方按鍵逐筆查看或播放全部。前面的筆畫會保留。',
+        traceStatus:'沿著提示完整書寫，系統會監督起筆、方向、順序與完整度。',
+        freeStatus:'提示淡化，但仍會監督起筆、方向、順序與完整度。',
+        done:l=>'✓ '+l+' 完成。',
+        sDone:n=>'✓ 第 '+n+' 筆完成。',
+        wrongStart:'✕ 起筆位置錯誤。',
+        wrongDir:'✕ 書寫方向錯誤。',
+        wrongEnd:'✕ 沒有到達正確終點。',
+        incomplete:'✕ 筆畫沒有完整寫完。',
+        footer:'書寫練習會檢查起筆位置、方向、順序與完整度。'
+      },
+      en:{
+        brand:'English Letter Writing Practice',
+        subtitle:'Print, cursive, uppercase, lowercase, and stroke-order practice',
+        printUpper:'Print Uppercase', printLower:'Print Lowercase',
+        cursiveUpper:'Cursive Uppercase', cursiveLower:'Cursive Lowercase',
+        watch:'Stroke Order', trace:'Trace', free:'Write by Yourself',
+        current:'Current Letter', prev:'Previous Stroke', play:'Play All', next:'Next Stroke',
+        clear:'Clear & Retry', ready:'Ready.',
+        stroke:n=>n+(n===1?' stroke':' strokes'),
+        watchStatus:'View each stroke or play all. Earlier strokes remain visible.',
+        traceStatus:'Trace the guide. Starting point, direction, order, and completeness are checked.',
+        freeStatus:'The guide is faded, but starting point, direction, order, and completeness are still checked.',
+        done:l=>'✓ '+l+' completed.',
+        sDone:n=>'✓ Stroke '+n+' completed.',
+        wrongStart:'✕ Incorrect starting point.',
+        wrongDir:'✕ Incorrect stroke direction.',
+        wrongEnd:'✕ The stroke did not reach the correct endpoint.',
+        incomplete:'✕ The stroke is incomplete.',
+        footer:'Writing practice checks starting point, direction, order, and completeness.'
       }
-    });
-    centerGlyphGroups();
-  }
+    };
 
-  function buildAlphabet(){
-    const bar=document.getElementById('alphabet'); bar.innerHTML='';
-    ABC.forEach((L,i)=>{
-      const b=document.createElement('button');
-      b.type='button';
-      b.className='glass-btn alpha '+(i===idx?'active ':'')+(isCursive()?'cursive':'');
-      b.textContent=style.endsWith('Lower')?L.toLowerCase():L;
-      b.addEventListener('click',()=>{idx=i;strokeIndex=0;clearDrawing();render();});
-      bar.appendChild(b);
-    });
-  }
-
-  function applyText(){
-    document.getElementById('brandTitle').textContent=text[lang].brand;
-    document.getElementById('brandSubtitle').textContent=text[lang].subtitle;
-    document.querySelectorAll('.style-btn').forEach(b=>b.textContent=text[lang][b.dataset.style]);
-    document.querySelectorAll('.mode').forEach(b=>b.textContent=text[lang][b.dataset.mode]);
-    document.getElementById('currentLabel').textContent=text[lang].current;
-    document.getElementById('prevStroke').textContent=text[lang].prev;
-    document.getElementById('playAll').textContent=text[lang].play;
-    document.getElementById('nextStroke').textContent=text[lang].next;
-    document.getElementById('clearBtn').textContent=text[lang].clear;
-    document.getElementById('footerNote').textContent=text[lang].footer;
-    document.querySelectorAll('.lang').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));
-  }
-
-  function render(){
-    document.getElementById('letterDisplay').textContent=label();
-    document.getElementById('letterDisplay').classList.toggle('cursive',isCursive());
-    document.getElementById('strokeCount').textContent=text[lang].stroke(data().length);
-    document.querySelectorAll('.style-btn').forEach(b=>b.classList.toggle('active',b.dataset.style===style));
-    document.querySelectorAll('.mode').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));
-    document.getElementById('modeTitle').textContent=text[lang][mode];
-    document.getElementById('modeStatus').textContent=text[lang][mode+'Status'];
-    const watching=mode==='watch';
-    document.getElementById('playAll').disabled=!watching;
-    document.getElementById('prevStroke').disabled=!watching;
-    document.getElementById('nextStroke').disabled=!watching;
-    buildAlphabet(); scene(); scheduleLeftScale();
-  }
-
-  function clearDrawing(){
-    ctx.clearRect(0,0,600,600); points=[]; drawing=false; scene();
-  }
-
-  function pos(e){
-    const r=canvas.getBoundingClientRect();
-    return {x:(e.clientX-r.left)*600/r.width,y:(e.clientY-r.top)*600/r.height};
-  }
-
-  function currentPath(){return guides.children[strokeIndex]}
-
-  function directionOK(path){
-    if(points.length<4)return true;
-    const L=path.getTotalLength();
-    const a=path.getPointAtLength(0);
-    const b=path.getPointAtLength(Math.min(65,L));
-    const u0=points[0];
-    const u1=points[Math.max(1,Math.floor(points.length*.2))];
-    return ((b.x-a.x)*(u1.x-u0.x)+(b.y-a.y)*(u1.y-u0.y))>0;
-  }
-
-  function evaluate(){
-    const path=currentPath(); if(!path||points.length<3)return;
-    const L=path.getTotalLength(), st=path.getPointAtLength(0), en=path.getPointAtLength(L);
-    let travel=0; for(let i=1;i<points.length;i++)travel+=dist(points[i-1],points[i]);
-    const fb=document.getElementById('feedback');
-
-    if(dist(points[0],st)>70) fb.textContent=text[lang].wrongStart;
-    else if(!directionOK(path)) fb.textContent=text[lang].wrongDir;
-    else if(dist(points[points.length-1],en)>85) fb.textContent=text[lang].wrongEnd;
-    else if(travel<L*.52) fb.textContent=text[lang].incomplete;
-    else if(strokeIndex<data().length-1){
-      fb.textContent=text[lang].sDone(strokeIndex+1);
-      strokeIndex++; scene();
-    } else fb.textContent=text[lang].done(label());
-
-    points=[];
-  }
-
-  canvas.addEventListener('pointerdown',e=>{
-    if(mode==='watch')return;
-    const path=currentPath(); if(!path)return;
-    const p=pos(e), st=path.getPointAtLength(0);
-    if(dist(p,st)>75){
-      document.getElementById('feedback').textContent=text[lang].wrongStart;
+    if(!window.QLETTER_PRINT_STROKES){
+      document.body.innerHTML = '<div style="padding:24px;color:white">筆順資料庫載入失敗：請確認 qletter-print-strokes-v1.js 與 index.html 在同一層。</div>';
       return;
     }
-    drawing=true; points=[p]; canvas.setPointerCapture(e.pointerId);
-    ctx.beginPath(); ctx.moveTo(p.x,p.y);
-  });
 
-  canvas.addEventListener('pointermove',e=>{
-    if(!drawing)return;
-    const p=pos(e); points.push(p);
-    ctx.strokeStyle=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#5b9cff';
-    ctx.lineWidth=isCursive()?11:13; ctx.lineCap='round';ctx.lineJoin='round';
-    ctx.lineTo(p.x,p.y);ctx.stroke();
-  });
+    const printUpper = Object.fromEntries(
+      Object.entries(window.QLETTER_PRINT_STROKES.upper).map(([k,paths]) => [k, paths.map(S)])
+    );
+    const printLower = Object.fromEntries(
+      Object.entries(window.QLETTER_PRINT_STROKES.lower).map(([k,paths]) => [k, paths.map(S)])
+    );
 
-  canvas.addEventListener('pointerup',()=>{if(!drawing)return;drawing=false;evaluate();});
-  canvas.addEventListener('pointercancel',()=>{drawing=false;points=[];});
+    /* 草寫目前維持舊版骨架，下一階段會逐字替換成正式教學路徑。 */
+    const cursiveUpper = {};
+    const cursiveLower = {};
+    ABC.forEach((L,i)=>{
+      const x = 165 + (i%3)*12;
+      cursiveUpper[L] = [S(`M${x} 500 C${x-15} 360 ${x+20} 210 ${x+70} 100 C${x+130} 180 ${x+150} 330 ${x+120} 500`)];
+      cursiveLower[L.toLowerCase()] = [S(`M${x} 465 C${x+20} 300 ${x+85} 235 ${x+145} 285 C${x+190} 335 ${x+170} 430 ${x+115} 465`)];
+    });
 
-  function play(){
-    clearTimeout(timer); strokeIndex=0; let i=0;
-    function step(){
-      if(i>=data().length){document.getElementById('feedback').textContent=text[lang].ready;return}
-      strokeIndex=i;scene();
-      const p=demo.children[i],L=p.getTotalLength();
-      p.setAttribute('opacity','1');
-      p.style.transition='none';p.style.strokeDasharray=L;p.style.strokeDashoffset=L;
-      requestAnimationFrame(()=>{p.style.transition='stroke-dashoffset .75s ease';p.style.strokeDashoffset='0'});
-      i++;timer=setTimeout(step,900);
+    let lang='zh', style='printUpper', mode='watch', idx=0, strokeIndex=0;
+    let points=[], drawing=false, timer=null;
+
+    const guides=document.getElementById('guides');
+    const demo=document.getElementById('demo');
+    const markers=document.getElementById('markers');
+    const canvas=document.getElementById('canvas');
+    const ctx=canvas.getContext('2d');
+
+    const label=()=>style.endsWith('Lower')?ABC[idx].toLowerCase():ABC[idx];
+
+    function data(){
+      const sets={printUpper,printLower,cursiveUpper,cursiveLower};
+      return sets[style][label()];
     }
-    step();
-  }
 
-  document.querySelectorAll('.lang').forEach(b=>b.addEventListener('click',()=>{lang=b.dataset.lang;applyText();render();}));
-  document.querySelectorAll('.style-btn').forEach(b=>b.addEventListener('click',()=>{style=b.dataset.style;strokeIndex=0;clearDrawing();render();}));
-  document.querySelectorAll('.mode').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.mode;strokeIndex=0;clearDrawing();render();}));
-  document.getElementById('prevLetter').addEventListener('click',()=>{idx=(idx+25)%26;strokeIndex=0;clearDrawing();render();});
-  document.getElementById('nextLetter').addEventListener('click',()=>{idx=(idx+1)%26;strokeIndex=0;clearDrawing();render();});
-  document.getElementById('prevStroke').addEventListener('click',()=>{strokeIndex=Math.max(0,strokeIndex-1);scene();});
-  document.getElementById('nextStroke').addEventListener('click',()=>{strokeIndex=Math.min(data().length-1,strokeIndex+1);scene();});
-  document.getElementById('playAll').addEventListener('click',play);
-  document.getElementById('clearBtn').addEventListener('click',()=>{strokeIndex=0;clearDrawing();document.getElementById('feedback').textContent=text[lang].ready;});
+    const isCursive=()=>style.startsWith('cursive');
 
-  const MASTER_WIDTH = 390;
+    function svgEl(tag,a){
+      const e=document.createElementNS('http://www.w3.org/2000/svg',tag);
+      Object.entries(a||{}).forEach(([k,v])=>e.setAttribute(k,v));
+      return e;
+    }
 
-  function scaleFromLeft(){
-    const fit = document.getElementById('viewportFit');
-    const stage = document.getElementById('scaleStage');
-    const app = document.getElementById('app');
-    if(!fit || !stage || !app) return;
+    const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
 
-    // Natural phone-sized master layout.
-    stage.style.transform = 'scale(1)';
-    fit.style.width = MASTER_WIDTH + 'px';
-    fit.style.height = 'auto';
+    function centerGlyphGroups(){
+      const allPaths=[...guides.querySelectorAll('path'), ...demo.querySelectorAll('path')];
+      if(!allPaths.length) return;
 
-    const naturalHeight = Math.ceil(app.offsetHeight);
-    const vw = window.innerWidth || document.documentElement.clientWidth || MASTER_WIDTH;
+      let minX=Infinity,maxX=-Infinity;
+      allPaths.forEach(p=>{
+        const b=p.getBBox();
+        if(!isFinite(b.x)) return;
+        minX=Math.min(minX,b.x);
+        maxX=Math.max(maxX,b.x+b.width);
+      });
 
-    // Always anchor at the far left. Scale from phone-size master layout.
-    // Small screens shrink; larger screens grow, with a practical maximum.
-    let scale = vw / MASTER_WIDTH;
-    scale = Math.max(0.5, Math.min(scale, 2.2));
+      if(!isFinite(minX)||!isFinite(maxX)) return;
+      const dx=300-(minX+maxX)/2;
+      [guides,demo,markers].forEach(g=>g.setAttribute('transform',`translate(${dx} 0)`));
+    }
 
-    stage.style.transformOrigin = 'top left';
-    stage.style.transform = `scale(${scale})`;
+    /*
+      重要修正：
+      看筆順時，所有 i <= strokeIndex 的筆畫都保留。
+      因此第 2 筆出現時，第 1 筆仍然存在；
+      第 3 筆出現時，第 1、2 筆仍然存在。
+    */
+    function scene(){
+      guides.innerHTML='';
+      demo.innerHTML='';
+      markers.innerHTML='';
 
-    fit.style.width = `${Math.ceil(MASTER_WIDTH * scale)}px`;
-    fit.style.height = `${Math.ceil(naturalHeight * scale)}px`;
-  }
+      data().forEach((s,i)=>{
+        const g=svgEl('path',{
+          d:s.d,
+          fill:'none',
+          stroke:'rgba(255,255,255,.55)',
+          'stroke-width':isCursive()?'14':'18',
+          'stroke-linecap':'round',
+          'stroke-linejoin':'round',
+          opacity:mode==='free'?'.035':'.16'
+        });
+        guides.appendChild(g);
 
-  let leftScaleRAF = 0;
-  function scheduleLeftScale(){
-    cancelAnimationFrame(leftScaleRAF);
-    leftScaleRAF = requestAnimationFrame(scaleFromLeft);
-  }
+        const cumulativeVisible = mode==='watch' && i<=strokeIndex;
+        const p=svgEl('path',{
+          d:s.d,
+          fill:'none',
+          stroke:'var(--accent)',
+          'stroke-width':isCursive()?'14':'18',
+          'stroke-linecap':'round',
+          'stroke-linejoin':'round',
+          opacity:cumulativeVisible?'1':'0'
+        });
+        demo.appendChild(p);
 
-  window.addEventListener('resize', scheduleLeftScale);
-  if(window.visualViewport){
-    window.visualViewport.addEventListener('resize', scheduleLeftScale);
-  }
+        if(i===strokeIndex && mode!=='free'){
+          const q=g.getPointAtLength(0);
+          markers.appendChild(svgEl('circle',{
+            cx:q.x,cy:q.y,r:'13',fill:'var(--accent)'
+          }));
+          const tx=svgEl('text',{
+            x:q.x+20,y:q.y+6,fill:'white','font-size':'21','font-weight':'700'
+          });
+          tx.textContent=String(i+1);
+          markers.appendChild(tx);
+        }
+      });
 
-  applyText();render();
-  scheduleLeftScale();
-})();
-</script>
+      centerGlyphGroups();
+    }
+
+    function buildAlphabet(){
+      const bar=document.getElementById('alphabet');
+      bar.innerHTML='';
+
+      ABC.forEach((L,i)=>{
+        const b=document.createElement('button');
+        b.type='button';
+        b.className='glass-btn alpha '+(i===idx?'active ':'')+(isCursive()?'cursive':'');
+        b.textContent=style.endsWith('Lower')?L.toLowerCase():L;
+        b.addEventListener('click',()=>{
+          idx=i;
+          strokeIndex=0;
+          clearDrawing();
+          render();
+        });
+        bar.appendChild(b);
+      });
+    }
+
+    function applyText(){
+      document.getElementById('brandTitle').textContent=text[lang].brand;
+      document.getElementById('brandSubtitle').textContent=text[lang].subtitle;
+      document.querySelectorAll('.style-btn').forEach(b=>b.textContent=text[lang][b.dataset.style]);
+      document.querySelectorAll('.mode').forEach(b=>b.textContent=text[lang][b.dataset.mode]);
+      document.getElementById('currentLabel').textContent=text[lang].current;
+      document.getElementById('prevStroke').textContent=text[lang].prev;
+      document.getElementById('playAll').textContent=text[lang].play;
+      document.getElementById('nextStroke').textContent=text[lang].next;
+      document.getElementById('clearBtn').textContent=text[lang].clear;
+      document.getElementById('footerNote').textContent=text[lang].footer;
+      document.querySelectorAll('.lang').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));
+    }
+
+    function render(){
+      document.getElementById('letterDisplay').textContent=label();
+      document.getElementById('letterDisplay').classList.toggle('cursive',isCursive());
+      document.getElementById('strokeCount').textContent=text[lang].stroke(data().length);
+
+      document.querySelectorAll('.style-btn').forEach(b=>b.classList.toggle('active',b.dataset.style===style));
+      document.querySelectorAll('.mode').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));
+
+      document.getElementById('modeTitle').textContent=text[lang][mode];
+      document.getElementById('modeStatus').textContent=text[lang][mode+'Status'];
+
+      const watching=mode==='watch';
+      document.getElementById('playAll').disabled=!watching;
+      document.getElementById('prevStroke').disabled=!watching;
+      document.getElementById('nextStroke').disabled=!watching;
+
+      buildAlphabet();
+      scene();
+      scheduleLeftScale();
+    }
+
+    function clearDrawing(){
+      ctx.clearRect(0,0,600,600);
+      points=[];
+      drawing=false;
+      scene();
+    }
+
+    function pos(e){
+      const r=canvas.getBoundingClientRect();
+      return {
+        x:(e.clientX-r.left)*600/r.width,
+        y:(e.clientY-r.top)*600/r.height
+      };
+    }
+
+    function currentPath(){return guides.children[strokeIndex]}
+
+    function directionOK(path){
+      if(points.length<4)return true;
+      const L=path.getTotalLength();
+      const a=path.getPointAtLength(0);
+      const b=path.getPointAtLength(Math.min(65,L));
+      const u0=points[0];
+      const u1=points[Math.max(1,Math.floor(points.length*.2))];
+      return ((b.x-a.x)*(u1.x-u0.x)+(b.y-a.y)*(u1.y-u0.y))>0;
+    }
+
+    function evaluate(){
+      const path=currentPath();
+      if(!path||points.length<3)return;
+
+      const L=path.getTotalLength();
+      const st=path.getPointAtLength(0);
+      const en=path.getPointAtLength(L);
+      let travel=0;
+
+      for(let i=1;i<points.length;i++) travel+=dist(points[i-1],points[i]);
+
+      const fb=document.getElementById('feedback');
+
+      if(dist(points[0],st)>70) fb.textContent=text[lang].wrongStart;
+      else if(!directionOK(path)) fb.textContent=text[lang].wrongDir;
+      else if(dist(points[points.length-1],en)>85) fb.textContent=text[lang].wrongEnd;
+      else if(travel<L*.52) fb.textContent=text[lang].incomplete;
+      else if(strokeIndex<data().length-1){
+        fb.textContent=text[lang].sDone(strokeIndex+1);
+        strokeIndex++;
+        scene();
+      }else{
+        fb.textContent=text[lang].done(label());
+      }
+
+      points=[];
+    }
+
+    canvas.addEventListener('pointerdown',e=>{
+      if(mode==='watch')return;
+      const path=currentPath();
+      if(!path)return;
+
+      const p=pos(e);
+      const st=path.getPointAtLength(0);
+
+      if(dist(p,st)>75){
+        document.getElementById('feedback').textContent=text[lang].wrongStart;
+        return;
+      }
+
+      drawing=true;
+      points=[p];
+      canvas.setPointerCapture(e.pointerId);
+      ctx.beginPath();
+      ctx.moveTo(p.x,p.y);
+    });
+
+    canvas.addEventListener('pointermove',e=>{
+      if(!drawing)return;
+      const p=pos(e);
+      points.push(p);
+
+      ctx.strokeStyle=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#5b9cff';
+      ctx.lineWidth=isCursive()?11:13;
+      ctx.lineCap='round';
+      ctx.lineJoin='round';
+      ctx.lineTo(p.x,p.y);
+      ctx.stroke();
+    });
+
+    canvas.addEventListener('pointerup',()=>{
+      if(!drawing)return;
+      drawing=false;
+      evaluate();
+    });
+
+    canvas.addEventListener('pointercancel',()=>{
+      drawing=false;
+      points=[];
+    });
+
+    /*
+      累積播放：
+      每一筆完成後不再消失。
+    */
+    function play(){
+      clearTimeout(timer);
+      strokeIndex=0;
+      let i=0;
+
+      function step(){
+        if(i>=data().length){
+          document.getElementById('feedback').textContent=text[lang].ready;
+          return;
+        }
+
+        strokeIndex=i;
+        scene();
+
+        const p=demo.children[i];
+        const L=p.getTotalLength();
+
+        p.style.transition='none';
+        p.style.strokeDasharray=L;
+        p.style.strokeDashoffset=L;
+        p.setAttribute('opacity','1');
+
+        requestAnimationFrame(()=>{
+          p.getBoundingClientRect();
+          p.style.transition='stroke-dashoffset .75s ease';
+          p.style.strokeDashoffset='0';
+        });
+
+        i++;
+        timer=setTimeout(step,900);
+      }
+
+      step();
+    }
+
+    document.querySelectorAll('.lang').forEach(b=>b.addEventListener('click',()=>{
+      lang=b.dataset.lang;
+      applyText();
+      render();
+    }));
+
+    document.querySelectorAll('.style-btn').forEach(b=>b.addEventListener('click',()=>{
+      style=b.dataset.style;
+      strokeIndex=0;
+      clearDrawing();
+      render();
+    }));
+
+    document.querySelectorAll('.mode').forEach(b=>b.addEventListener('click',()=>{
+      mode=b.dataset.mode;
+      strokeIndex=0;
+      clearDrawing();
+      render();
+    }));
+
+    document.getElementById('prevLetter').addEventListener('click',()=>{
+      idx=(idx+25)%26;
+      strokeIndex=0;
+      clearDrawing();
+      render();
+    });
+
+    document.getElementById('nextLetter').addEventListener('click',()=>{
+      idx=(idx+1)%26;
+      strokeIndex=0;
+      clearDrawing();
+      render();
+    });
+
+    document.getElementById('prevStroke').addEventListener('click',()=>{
+      clearTimeout(timer);
+      strokeIndex=Math.max(0,strokeIndex-1);
+      scene();
+    });
+
+    document.getElementById('nextStroke').addEventListener('click',()=>{
+      clearTimeout(timer);
+      strokeIndex=Math.min(data().length-1,strokeIndex+1);
+      scene();
+    });
+
+    document.getElementById('playAll').addEventListener('click',play);
+
+    document.getElementById('clearBtn').addEventListener('click',()=>{
+      clearTimeout(timer);
+      strokeIndex=0;
+      clearDrawing();
+      document.getElementById('feedback').textContent=text[lang].ready;
+    });
+
+    const MASTER_WIDTH=390;
+
+    function scaleFromLeft(){
+      const fit=document.getElementById('viewportFit');
+      const stage=document.getElementById('scaleStage');
+      const app=document.getElementById('app');
+      if(!fit||!stage||!app)return;
+
+      stage.style.transform='scale(1)';
+      fit.style.width=MASTER_WIDTH+'px';
+      fit.style.height='auto';
+
+      const naturalHeight=Math.ceil(app.offsetHeight);
+      const vw=window.innerWidth||document.documentElement.clientWidth||MASTER_WIDTH;
+
+      let scale=vw/MASTER_WIDTH;
+      scale=Math.max(0.5,Math.min(scale,2.2));
+
+      stage.style.transformOrigin='top left';
+      stage.style.transform=`scale(${scale})`;
+
+      fit.style.width=`${Math.ceil(MASTER_WIDTH*scale)}px`;
+      fit.style.height=`${Math.ceil(naturalHeight*scale)}px`;
+    }
+
+    let leftScaleRAF=0;
+
+    function scheduleLeftScale(){
+      cancelAnimationFrame(leftScaleRAF);
+      leftScaleRAF=requestAnimationFrame(scaleFromLeft);
+    }
+
+    window.addEventListener('resize',scheduleLeftScale);
+    if(window.visualViewport){
+      window.visualViewport.addEventListener('resize',scheduleLeftScale);
+    }
+
+    applyText();
+    render();
+    scheduleLeftScale();
+  })();
+  </script>
 </body>
 </html>
