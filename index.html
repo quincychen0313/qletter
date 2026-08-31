@@ -20,12 +20,42 @@
     }
     *{box-sizing:border-box}
     html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC",Arial,sans-serif}
-    body{min-height:100vh;padding:24px}
+    
+    /* Left-anchored whole-interface scaling */
+    body{
+      min-height:100vh;
+      margin:0;
+      padding:0;
+      overflow:auto;
+      background:var(--bg);
+    }
+    .viewport-fit{
+      position:relative;
+      width:390px;
+      height:auto;
+      margin:0;
+      padding:0;
+      overflow:visible;
+    }
+    .scale-stage{
+      width:390px;
+      margin:0;
+      padding:0;
+      transform-origin:top left;
+      will-change:transform;
+    }
+    .app{
+      width:390px;
+      margin:0;
+      padding:10px;
+      display:grid;
+      gap:10px;
+    }
+
     button{font:inherit;color:inherit}
-    .app{width:min(960px,100%);margin:0 auto;display:grid;gap:16px}
     .glass-shell{
       border:1px solid var(--border);
-      border-radius:30px;
+      border-radius:24px;
       background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025));
       backdrop-filter:blur(20px) saturate(155%);
       -webkit-backdrop-filter:blur(20px) saturate(155%);
@@ -33,7 +63,7 @@
     }
     .glass-btn{
       position:relative;
-      min-height:48px;
+      min-height:44px;
       border:1px solid rgba(255,255,255,.14);
       border-radius:999px;
       padding:0 18px;
@@ -58,61 +88,94 @@
     }
     .glass-btn:disabled{opacity:.35;cursor:not-allowed;transform:none}
     .topbar{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
-    .brand{font-size:clamp(24px,4vw,40px);font-weight:800;letter-spacing:-.03em}
-    .subtitle{color:var(--muted);font-size:14px;margin-top:4px}
+    .brand{font-size:clamp(20px,5.6vw,30px);font-weight:800;letter-spacing:-.03em}
+    .subtitle{color:var(--muted);font-size:13px;margin-top:4px}
     .lang-switch{display:inline-flex;padding:4px;border-radius:999px}
-    .lang{min-height:42px;padding:0 17px}
-    .styles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-    .style-btn{border-radius:22px;min-height:58px}
-    .letter-card{padding:18px}
+    .lang{min-height:38px;padding:0 14px}
+    .styles{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+    .style-btn{border-radius:18px;min-height:44px;padding:0 10px;font-size:.88rem}
+    .letter-card{padding:12px}
     .letter-main{display:flex;align-items:center;justify-content:space-between;gap:16px}
-    .nav{width:78px;height:78px;padding:0;font-size:2.4rem;line-height:1}
+    .nav{width:48px;height:48px;padding:0;font-size:1.65rem;line-height:1}
     .center{text-align:center;min-width:0}
     .current-label{font-size:12px;color:var(--muted)}
-    .letter-display{font-size:72px;line-height:1;font-weight:700;margin-top:8px}
+    .letter-display{font-size:46px;line-height:1;font-weight:700;margin-top:5px}
     .letter-display.cursive{
       font-family:"Snell Roundhand","Apple Chancery","Segoe Script","Brush Script MT",cursive;
-      font-size:88px;font-weight:500
+      font-size:66px;font-weight:500
     }
     .count{margin-top:8px;font-size:14px;color:var(--muted)}
     .alphabet{display:flex;gap:8px;overflow-x:auto;padding-top:16px;padding-bottom:2px;scrollbar-width:thin}
-    .alpha{min-width:72px;height:54px;flex:0 0 auto;padding:0 15px;font-size:1.05rem}
+    .alpha{min-width:46px;height:40px;flex:0 0 auto;padding:0 10px;font-size:.88rem}
     .alpha.cursive{
       font-family:"Snell Roundhand","Apple Chancery","Segoe Script","Brush Script MT",cursive;
       font-size:1.55rem;font-weight:500
     }
-    .modes{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-    .mode{width:100%;min-height:60px;border-radius:24px}
-    .practice{padding:18px}
-    .title{font-size:18px;font-weight:700}
+    .modes{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+    .mode{width:100%;min-height:46px;border-radius:18px;padding:0 8px;font-size:.86rem}
+    .practice{padding:12px;display:flex;flex-direction:column;align-items:center}
+    .practice > .title,.practice > .status,.practice > .feedback-row{width:100%}
+    .practice > .status{margin-bottom:2px}
+    .stroke-controls,.board{align-self:center}
+    .title{font-size:16px;font-weight:700}
     .status{color:var(--muted);font-size:14px;margin-top:4px}
-    .stroke-controls{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:18px 0}
-    .stroke-control{min-width:142px;min-height:56px}
+    .stroke-controls{display:flex;justify-content:center;gap:6px;flex-wrap:nowrap;margin:12px 0;width:100%}
+    .stroke-control{min-width:0;flex:1 1 0;min-height:42px;padding:0 8px;font-size:.82rem}
     .board{
-      position:relative;width:min(560px,100%);aspect-ratio:1/1;margin:0 auto;overflow:hidden;border-radius:28px;
+      position:relative;width:min(330px,100%);aspect-ratio:1/1;margin:0 auto;overflow:hidden;border-radius:20px;
       border:1px solid var(--border);background:var(--panel2);touch-action:none
     }
     .board svg,.board canvas{position:absolute;inset:0;width:100%;height:100%}
     .feedback-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:14px}
     .feedback{font-size:14px;min-height:22px}
-    .clear{min-height:46px}
+    .clear{min-height:42px;padding:0 14px}
     .footer-note{text-align:center;color:var(--muted);font-size:12px;padding:6px 0 12px}
-    @media(max-width:760px){
-      body{padding:14px}
+    
       .styles{grid-template-columns:repeat(2,1fr)}
       .nav{width:64px;height:64px}
       .letter-display{font-size:60px}
       .letter-display.cursive{font-size:72px}
     }
-    @media(max-width:520px){
-      .stroke-control{min-width:0;flex:1 1 90px;padding:0 10px;font-size:.9rem}
+    
       .alpha{min-width:62px}
       .mode{font-size:.92rem}
     }
+  
+    
+    }
+  
+    
+      .board{width:350px}
+      .brand{font-size:28px}
+      .letter-display{font-size:50px}
+      .letter-display.cursive{font-size:62px}
+      .alpha{min-width:50px}
+    }
+    
+      .styles{grid-template-columns:repeat(4,1fr)}
+      .board{width:390px}
+      .style-btn{min-height:46px;font-size:.9rem}
+      .mode{min-height:48px;font-size:.9rem}
+      .stroke-control{min-height:44px;font-size:.86rem}
+      .nav{width:52px;height:52px;font-size:1.75rem}
+      .letter-display{font-size:54px}
+      .letter-display.cursive{font-size:66px}
+    }
+    
+      .board{width:420px}
+      .brand{font-size:30px}
+      .style-btn{min-height:48px;font-size:.92rem}
+      .mode{min-height:50px;font-size:.92rem}
+      .stroke-control{min-height:46px;font-size:.88rem}
+      .nav{width:56px;height:56px;font-size:1.85rem}
+      .letter-display{font-size:58px}
+      .letter-display.cursive{font-size:72px}
+    }
+
   </style>
 </head>
 <body>
-  <main class="app" id="app">
+  <div id="viewportFit" class="viewport-fit"><div id="scaleStage" class="scale-stage"><main class="app" id="app">
     <section class="topbar">
       <div>
         <div class="brand" id="brandTitle">英文字母書寫練習</div>
@@ -177,7 +240,7 @@
     </section>
 
     <div class="footer-note" id="footerNote">書寫練習會檢查起筆位置、方向、順序與完整度。</div>
-  </main>
+  </main></div></div>
 
 <script>
 (() => {
@@ -312,6 +375,22 @@
   }
   const isCursive=()=>style.startsWith('cursive');
 
+  function centerGlyphGroups(){
+    const allPaths=[...guides.querySelectorAll('path'), ...demo.querySelectorAll('path')];
+    if(!allPaths.length) return;
+    let minX=Infinity,maxX=-Infinity;
+    allPaths.forEach(p=>{
+      const b=p.getBBox();
+      if(!isFinite(b.x)) return;
+      minX=Math.min(minX,b.x);
+      maxX=Math.max(maxX,b.x+b.width);
+    });
+    if(!isFinite(minX)||!isFinite(maxX)) return;
+    const currentCenter=(minX+maxX)/2;
+    const dx=300-currentCenter;
+    [guides,demo,markers].forEach(g=>g.setAttribute('transform', `translate(${dx} 0)`));
+  }
+
   function svgEl(tag,a){
     const e=document.createElementNS('http://www.w3.org/2000/svg',tag);
     Object.entries(a||{}).forEach(([k,v])=>e.setAttribute(k,v));
@@ -345,6 +424,7 @@
         tx.textContent=String(i+1); markers.appendChild(tx);
       }
     });
+    centerGlyphGroups();
   }
 
   function buildAlphabet(){
@@ -385,7 +465,7 @@
     document.getElementById('playAll').disabled=!watching;
     document.getElementById('prevStroke').disabled=!watching;
     document.getElementById('nextStroke').disabled=!watching;
-    buildAlphabet(); scene();
+    buildAlphabet(); scene(); scheduleLeftScale();
   }
 
   function clearDrawing(){
@@ -474,7 +554,47 @@
   document.getElementById('playAll').addEventListener('click',play);
   document.getElementById('clearBtn').addEventListener('click',()=>{strokeIndex=0;clearDrawing();document.getElementById('feedback').textContent=text[lang].ready;});
 
+  const MASTER_WIDTH = 390;
+
+  function scaleFromLeft(){
+    const fit = document.getElementById('viewportFit');
+    const stage = document.getElementById('scaleStage');
+    const app = document.getElementById('app');
+    if(!fit || !stage || !app) return;
+
+    // Natural phone-sized master layout.
+    stage.style.transform = 'scale(1)';
+    fit.style.width = MASTER_WIDTH + 'px';
+    fit.style.height = 'auto';
+
+    const naturalHeight = Math.ceil(app.offsetHeight);
+    const vw = window.innerWidth || document.documentElement.clientWidth || MASTER_WIDTH;
+
+    // Always anchor at the far left. Scale from phone-size master layout.
+    // Small screens shrink; larger screens grow, with a practical maximum.
+    let scale = vw / MASTER_WIDTH;
+    scale = Math.max(0.5, Math.min(scale, 2.2));
+
+    stage.style.transformOrigin = 'top left';
+    stage.style.transform = `scale(${scale})`;
+
+    fit.style.width = `${Math.ceil(MASTER_WIDTH * scale)}px`;
+    fit.style.height = `${Math.ceil(naturalHeight * scale)}px`;
+  }
+
+  let leftScaleRAF = 0;
+  function scheduleLeftScale(){
+    cancelAnimationFrame(leftScaleRAF);
+    leftScaleRAF = requestAnimationFrame(scaleFromLeft);
+  }
+
+  window.addEventListener('resize', scheduleLeftScale);
+  if(window.visualViewport){
+    window.visualViewport.addEventListener('resize', scheduleLeftScale);
+  }
+
   applyText();render();
+  scheduleLeftScale();
 })();
 </script>
 </body>
