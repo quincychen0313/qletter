@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>英文字母書寫練習</title>
+  <meta name="description" content="中英文雙語英文字母書寫練習，包含印刷體大小寫與草寫大小寫。" />
+  <style>
+    :root{
+      --bg:#090a0c;
+      --panel:rgba(255,255,255,.055);
+      --panel2:rgba(255,255,255,.025);
+      --text:#f7f8fb;
+      --muted:#9aa1ad;
+      --border:rgba(255,255,255,.09);
+      --accent:#5b9cff;
+      --accent-bg:rgba(59,130,246,.20);
+      --danger:#ff6b6b;
+      --success:#64d98b;
+    }
+
+    *{box-sizing:border-box}
+
+    html,body{
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC",Arial,sans-serif;
+    }
+
+    body{
+      min-height:100vh;
+      padding:0;
+      overflow:auto;
+      background:var(--bg);
+    }
+
+    /* 永遠以左側為基準縮放 */
+    .viewport-fit{
+      position:relative;
+      width:390px;
+      height:auto;
+      margin:0;
+      padding:0;
+      overflow:visible;
+    }
+
+    .scale-stage{
+      width:390px;
+      margin:0;
+      padding:0;
+      transform-origin:top left;
+      will-change:transform;
+    }
+
+    .app{
+      width:390px;
+      margin:0;
+      padding:10px;
+      display:grid;
+      gap:10px;
+    }
+
+    button{font:inherit;color:inherit}
+
+    .glass-shell{
+      border:1px solid var(--border);
+      border-radius:24px;
+      background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025));
+      backdrop-filter:blur(20px) saturate(155%);
+      -webkit-backdrop-filter:blur(20px) saturate(155%);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.09),0 12px 32px rgba(0,0,0,.18);
+    }
+
+    .glass-btn{
+      position:relative;
+      min-height:44px;
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:999px;
+      padding:0 18px;
+      color:var(--text);
+      font-weight:700;
+      background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.04));
+      backdrop-filter:blur(18px) saturate(160%);
+      -webkit-backdrop-filter:blur(18px) saturate(160%);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 8px 22px rgba(0,0,0,.13);
+      transition:transform .16s ease,border-color .16s ease,background .16s ease;
+      cursor:pointer;
+    }
+
+    .glass-btn::before{
+      content:"";
+      position:absolute;
+      left:14px;right:14px;top:5px;height:34%;
+      border-radius:999px;
+      background:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,0));
+      pointer-events:none;
+    }
+
+    .glass-btn:active{transform:scale(.98)}
+    .glass-btn.active,.primary{
+      border-color:rgba(74,142,255,.8);
+      background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.05)),var(--accent-bg);
+    }
+    .glass-btn:disabled{opacity:.35;cursor:not-allowed;transform:none}
+
+    .topbar{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+    .brand{font-size:clamp(20px,5.6vw,30px);font-weight:800;letter-spacing:-.03em}
+    .subtitle{color:var(--muted);font-size:13px;margin-top:4px}
+    .lang-switch{display:inline-flex;padding:4px;border-radius:999px}
+    .lang{min-height:38px;padding:0 14px}
+
+    .styles{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+    .style-btn{border-radius:18px;min-height:44px;padding:0 10px;font-size:.88rem}
+
+    .letter-card{padding:12px}
+    .letter-main{display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .nav{width:48px;height:48px;padding:0;font-size:1.65rem;line-height:1}
+    .center{text-align:center;min-width:0}
+    .current-label{font-size:12px;color:var(--muted)}
+    .letter-display{font-size:46px;line-height:1;font-weight:700;margin-top:5px}
+    .letter-display.cursive{
+      font-family:"Snell Roundhand","Apple Chancery","Segoe Script","Brush Script MT",cursive;
+      font-size:66px;
+      font-weight:500;
+    }
+
+    .count{margin-top:8px;font-size:14px;color:var(--muted)}
+    .alphabet{display:flex;gap:8px;overflow-x:auto;padding-top:16px;padding-bottom:2px;scrollbar-width:thin}
+    .alpha{min-width:46px;height:40px;flex:0 0 auto;padding:0 10px;font-size:.88rem}
+    .alpha.cursive{
+      font-family:"Snell Roundhand","Apple Chancery","Segoe Script","Brush Script MT",cursive;
+      font-size:1.55rem;
+      font-weight:500;
+    }
+
+    .modes{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+    .mode{width:100%;min-height:46px;border-radius:18px;padding:0 8px;font-size:.86rem}
+
+    .practice{padding:12px;display:flex;flex-direction:column;align-items:center}
+    .practice > .title,.practice > .status,.practice > .feedback-row{width:100%}
+    .practice > .status{margin-bottom:2px}
+    .stroke-controls,.board{align-self:center}
+    .title{font-size:16px;font-weight:700}
+    .status{color:var(--muted);font-size:14px;margin-top:4px}
+
+    .stroke-controls{
+      display:flex;
+      justify-content:center;
+      gap:6px;
+      flex-wrap:nowrap;
+      margin:12px 0;
+      width:100%;
+    }
+
+    .stroke-control{min-width:0;flex:1 1 0;min-height:42px;padding:0 8px;font-size:.82rem}
+
+    .board{
+      position:relative;
+      width:min(330px,100%);
+      aspect-ratio:1/1;
+      margin:0 auto;
+      overflow:hidden;
+      border-radius:20px;
+      border:1px solid var(--border);
+      background:var(--panel2);
+      touch-action:none;
+    }
+
+    .board svg,.board canvas{position:absolute;inset:0;width:100%;height:100%}
+    .feedback-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:14px}
+    .feedback{font-size:14px;min-height:22px}
+    .clear{min-height:42px;padding:0 14px}
+    .footer-note{text-align:center;color:var(--muted);font-size:12px;padding:6px 0 12px}
+  </style>
+</head>
+
+<body>
+  <div id="viewportFit" class="viewport-fit">
+    <div id="scaleStage" class="scale-stage">
+      <main class="app" id="app">
+        <section class="topbar">
+          <div>
+            <div class="brand" id="brandTitle">英文字母書寫練習</div>
+            <div class="subtitle" id="brandSubtitle">印刷體、草寫、大小寫與筆順練習</div>
+          </div>
+          <div class="glass-shell lang-switch">
+            <button type="button" class="glass-btn lang active" data-lang="zh">中文</button>
+            <button type="button" class="glass-btn lang" data-lang="en">English</button>
+          </div>
+        </section>
+
+        <section class="styles">
+          <button type="button" class="glass-btn style-btn active" data-style="printUpper">印刷體大寫</button>
+          <button type="button" class="glass-btn style-btn" data-style="printLower">印刷體小寫</button>
+          <button type="button" class="glass-btn style-btn" data-style="cursiveUpper">草寫大寫</button>
+          <button type="button" class="glass-btn style-btn" data-style="cursiveLower">草寫小寫</button>
+        </section>
+
+        <section class="glass-shell letter-card">
+          <div class="letter-main">
+            <button id="prevLetter" class="glass-btn nav" type="button" aria-label="上一個字母">‹</button>
+            <div class="center">
+              <div id="currentLabel" class="current-label">目前字母</div>
+              <div id="letterDisplay" class="letter-display">A</div>
+              <div id="strokeCount" class="count">3 筆</div>
+            </div>
+            <button id="nextLetter" class="glass-btn nav" type="button" aria-label="下一個字母">›</button>
+          </div>
+          <div id="alphabet" class="alphabet"></div>
+        </section>
+
+        <section class="modes">
+          <button type="button" class="glass-btn mode active" data-mode="watch">看筆順</button>
+          <button type="button" class="glass-btn mode" data-mode="trace">跟著寫</button>
+          <button type="button" class="glass-btn mode" data-mode="free">自己寫</button>
+        </section>
+
+        <section class="glass-shell practice">
+          <div class="title" id="modeTitle">看筆順</div>
+          <div class="status" id="modeStatus">用下方按鍵逐筆查看或播放全部。</div>
+
+          <div class="stroke-controls">
+            <button id="prevStroke" class="glass-btn stroke-control" type="button">上一筆</button>
+            <button id="playAll" class="glass-btn stroke-control primary" type="button">播放全部</button>
+            <button id="nextStroke" class="glass-btn stroke-control" type="button">下一筆</button>
+          </div>
+
+          <div class="board">
+            <svg viewBox="0 0 600 600" aria-label="字母練習區">
+              <line x1="35" y1="80" x2="565" y2="80" stroke="rgba(255,255,255,.12)" stroke-width="2"/>
+              <line x1="35" y1="295" x2="565" y2="295" stroke="rgba(255,255,255,.12)" stroke-width="2" stroke-dasharray="8 8"/>
+              <line x1="35" y1="510" x2="565" y2="510" stroke="rgba(255,255,255,.12)" stroke-width="3"/>
+              <g id="guides"></g>
+              <g id="demo"></g>
+              <g id="markers"></g>
+            </svg>
+            <canvas id="canvas" width="600" height="600"></canvas>
+          </div>
+
+          <div class="feedback-row">
+            <div id="feedback" class="feedback" aria-live="polite">準備好了。</div>
+            <button id="clearBtn" class="glass-btn clear" type="button">清除重寫</button>
+          </div>
+        </section>
+
+        <div class="footer-note" id="footerNote">書寫練習會檢查起筆位置、方向、順序與完整度。</div>
+      </main>
+    </div>
+  </div>
+
+  <!-- 正式印刷體 52 字母筆順資料庫 -->
+  <script src="qletter-print-strokes-v1.js"></script>
+
+  <script>
+  (() => {
+    const ABC = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+    const S = d => ({d});
+
+    const text = {
+      zh:{
+        brand:'英文字母書寫練習',
+        subtitle:'印刷體、草寫、大小寫與筆順練習',
+        printUpper:'印刷體大寫', printLower:'印刷體小寫',
+        cursiveUpper:'草寫大寫', cursiveLower:'草寫小寫',
+        watch:'看筆順', trace:'跟著寫', free:'自己寫',
+        current:'目前字母', prev:'上一筆', play:'播放全部', next:'下一筆',
+        clear:'清除重寫', ready:'準備好了。',
+        stroke:n=>n+' 筆',
+        watchStatus:'用下方按鍵逐筆查看或播放全部。前面的筆畫會保留。',
+        traceStatus:'沿著提示完整書寫，系統會監督起筆、方向、順序與完整度。',
+        freeStatus:'提示淡化，但仍會監督起筆、方向、順序與完整度。',
+        done:l=>'✓ '+l+' 完成。',
+        sDone:n=>'✓ 第 '+n+' 筆完成。',
+        wrongStart:'✕ 起筆位置錯誤。',
+        wrongDir:'✕ 書寫方向錯誤。',
+        wrongEnd:'✕ 沒有到達正確終點。',
+        incomplete:'✕ 筆畫沒有完整寫完。',
+        footer:'書寫練習會檢查起筆位置、方向、順序與完整度。'
+      },
+      en:{
+        brand:'English Letter Writing Practice',
+        subtitle:'Print, cursive, uppercase, lowercase, and stroke-order practice',
+        printUpper:'Print Uppercase', printLower:'Print Lowercase',
+        cursiveUpper:'Cursive Uppercase', cursiveLower:'Cursive Lowercase',
+        watch:'Stroke Order', trace:'Trace', free:'Write by Yourself',
+        current:'Current Letter', prev:'Previous Stroke', play:'Play All', next:'Next Stroke',
+        clear:'Clear & Retry', ready:'Ready.',
+        stroke:n=>n+(n===1?' stroke':' strokes'),
+        watchStatus:'View each stroke or play all. Earlier strokes remain visible.',
+        traceStatus:'Trace the guide. Starting point, direction, order, and completeness are checked.',
+        freeStatus:'The guide is faded, but starting point, direction, order, and completeness are still checked.',
+        done:l=>'✓ '+l+' completed.',
+        sDone:n=>'✓ Stroke '+n+' completed.',
+        wrongStart:'✕ Incorrect starting point.',
+        wrongDir:'✕ Incorrect stroke direction.',
+        wrongEnd:'✕ The stroke did not reach the correct endpoint.',
+        incomplete:'✕ The stroke is incomplete.',
+        footer:'Writing practice checks starting point, direction, order, and completeness.'
+      }
+    };
+
+    if(!window.QLETTER_PRINT_STROKES){
+      document.body.innerHTML = '<div style="padding:24px;color:white">筆順資料庫載入失敗：請確認 qletter-print-strokes-v1.js 與 index.html 在同一層。</div>';
+      return;
+    }
+
+    const printUpper = Object.fromEntries(
+      Object.entries(window.QLETTER_PRINT_STROKES.upper).map(([k,paths]) => [k, paths.map(S)])
+    );
+    const printLower = Object.fromEntries(
+      Object.entries(window.QLETTER_PRINT_STROKES.lower).map(([k,paths]) => [k, paths.map(S)])
+    );
+
+    /* 草寫目前維持舊版骨架，下一階段會逐字替換成正式教學路徑。 */
+    const cursiveUpper = {};
+    const cursiveLower = {};
+    ABC.forEach((L,i)=>{
+      const x = 165 + (i%3)*12;
+      cursiveUpper[L] = [S(`M${x} 500 C${x-15} 360 ${x+20} 210 ${x+70} 100 C${x+130} 180 ${x+150} 330 ${x+120} 500`)];
+      cursiveLower[L.toLowerCase()] = [S(`M${x} 465 C${x+20} 300 ${x+85} 235 ${x+145} 285 C${x+190} 335 ${x+170} 430 ${x+115} 465`)];
+    });
+
+    let lang='zh', style='printUpper', mode='watch', idx=0, strokeIndex=0;
+    let points=[], drawing=false, timer=null;
+
+    const guides=document.getElementById('guides');
+    const demo=document.getElementById('demo');
+    const markers=document.getElementById('markers');
+    const canvas=document.getElementById('canvas');
+    const ctx=canvas.getContext('2d');
+
+    const label=()=>style.endsWith('Lower')?ABC[idx].toLowerCase():ABC[idx];
+
+    function data(){
+      const sets={printUpper,printLower,cursiveUpper,cursiveLower};
+      return sets[style][label()];
+    }
+
+    const isCursive=()=>style.startsWith('cursive');
+
+    function svgEl(tag,a){
+      const e=document.createElementNS('http://www.w3.org/2000/svg',tag);
+      Object.entries(a||{}).forEach(([k,v])=>e.setAttribute(k,v));
+      return e;
+    }
+
+    const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
+
+    function centerGlyphGroups(){
+      const allPaths=[...guides.querySelectorAll('path'), ...demo.querySelectorAll('path')];
+      if(!allPaths.length) return;
+
+      let minX=Infinity,maxX=-Infinity;
+      allPaths.forEach(p=>{
+        const b=p.getBBox();
+        if(!isFinite(b.x)) return;
+        minX=Math.min(minX,b.x);
+        maxX=Math.max(maxX,b.x+b.width);
+      });
+
+      if(!isFinite(minX)||!isFinite(maxX)) return;
+      const dx=300-(minX+maxX)/2;
+      [guides,demo,markers].forEach(g=>g.setAttribute('transform',`translate(${dx} 0)`));
+    }
+
+    /*
+      重要修正：
+      看筆順時，所有 i <= strokeIndex 的筆畫都保留。
+      因此第 2 筆出現時，第 1 筆仍然存在；
+      第 3 筆出現時，第 1、2 筆仍然存在。
+    */
+    function scene(){
+      guides.innerHTML='';
+      demo.innerHTML='';
+      markers.innerHTML='';
+
+      data().forEach((s,i)=>{
+        const g=svgEl('path',{
+          d:s.d,
+          fill:'none',
+          stroke:'rgba(255,255,255,.55)',
+          'stroke-width':isCursive()?'14':'18',
+          'stroke-linecap':'round',
+          'stroke-linejoin':'round',
+          opacity:mode==='free'?'.035':'.16'
+        });
+        guides.appendChild(g);
+
+        const cumulativeVisible = mode==='watch' && i<=strokeIndex;
+        const p=svgEl('path',{
+          d:s.d,
+          fill:'none',
+          stroke:'var(--accent)',
+          'stroke-width':isCursive()?'14':'18',
+          'stroke-linecap':'round',
+          'stroke-linejoin':'round',
+          opacity:cumulativeVisible?'1':'0'
+        });
+        demo.appendChild(p);
+
+        if(i===strokeIndex && mode!=='free'){
+          const q=g.getPointAtLength(0);
+          markers.appendChild(svgEl('circle',{
+            cx:q.x,cy:q.y,r:'13',fill:'var(--accent)'
+          }));
+          const tx=svgEl('text',{
+            x:q.x+20,y:q.y+6,fill:'white','font-size':'21','font-weight':'700'
+          });
+          tx.textContent=String(i+1);
+          markers.appendChild(tx);
+        }
+      });
+
+      centerGlyphGroups();
+    }
+
+    function buildAlphabet(){
+      const bar=document.getElementById('alphabet');
+      bar.innerHTML='';
+
+      ABC.forEach((L,i)=>{
+        const b=document.createElement('button');
+        b.type='button';
+        b.className='glass-btn alpha '+(i===idx?'active ':'')+(isCursive()?'cursive':'');
+        b.textContent=style.endsWith('Lower')?L.toLowerCase():L;
+        b.addEventListener('click',()=>{
+          idx=i;
+          strokeIndex=0;
+          clearDrawing();
+          render();
+        });
+        bar.appendChild(b);
+      });
+    }
+
+    function applyText(){
+      document.getElementById('brandTitle').textContent=text[lang].brand;
+      document.getElementById('brandSubtitle').textContent=text[lang].subtitle;
+      document.querySelectorAll('.style-btn').forEach(b=>b.textContent=text[lang][b.dataset.style]);
+      document.querySelectorAll('.mode').forEach(b=>b.textContent=text[lang][b.dataset.mode]);
+      document.getElementById('currentLabel').textContent=text[lang].current;
+      document.getElementById('prevStroke').textContent=text[lang].prev;
+      document.getElementById('playAll').textContent=text[lang].play;
+      document.getElementById('nextStroke').textContent=text[lang].next;
+      document.getElementById('clearBtn').textContent=text[lang].clear;
+      document.getElementById('footerNote').textContent=text[lang].footer;
+      document.querySelectorAll('.lang').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));
+    }
+
+    function render(){
+      document.getElementById('letterDisplay').textContent=label();
+      document.getElementById('letterDisplay').classList.toggle('cursive',isCursive());
+      document.getElementById('strokeCount').textContent=text[lang].stroke(data().length);
+
+      document.querySelectorAll('.style-btn').forEach(b=>b.classList.toggle('active',b.dataset.style===style));
+      document.querySelectorAll('.mode').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));
+
+      document.getElementById('modeTitle').textContent=text[lang][mode];
+      document.getElementById('modeStatus').textContent=text[lang][mode+'Status'];
+
+      const watching=mode==='watch';
+      document.getElementById('playAll').disabled=!watching;
+      document.getElementById('prevStroke').disabled=!watching;
+      document.getElementById('nextStroke').disabled=!watching;
+
+      buildAlphabet();
+      scene();
+      scheduleLeftScale();
+    }
+
+    function clearDrawing(){
+      ctx.clearRect(0,0,600,600);
+      points=[];
+      drawing=false;
+      scene();
+    }
+
+    function pos(e){
+      const r=canvas.getBoundingClientRect();
+      return {
+        x:(e.clientX-r.left)*600/r.width,
+        y:(e.clientY-r.top)*600/r.height
+      };
+    }
+
+    function currentPath(){return guides.children[strokeIndex]}
+
+    function directionOK(path){
+      if(points.length<4)return true;
+      const L=path.getTotalLength();
+      const a=path.getPointAtLength(0);
+      const b=path.getPointAtLength(Math.min(65,L));
+      const u0=points[0];
+      const u1=points[Math.max(1,Math.floor(points.length*.2))];
+      return ((b.x-a.x)*(u1.x-u0.x)+(b.y-a.y)*(u1.y-u0.y))>0;
+    }
+
+    function evaluate(){
+      const path=currentPath();
+      if(!path||points.length<3)return;
+
+      const L=path.getTotalLength();
+      const st=path.getPointAtLength(0);
+      const en=path.getPointAtLength(L);
+      let travel=0;
+
+      for(let i=1;i<points.length;i++) travel+=dist(points[i-1],points[i]);
+
+      const fb=document.getElementById('feedback');
+
+      if(dist(points[0],st)>70) fb.textContent=text[lang].wrongStart;
+      else if(!directionOK(path)) fb.textContent=text[lang].wrongDir;
+      else if(dist(points[points.length-1],en)>85) fb.textContent=text[lang].wrongEnd;
+      else if(travel<L*.52) fb.textContent=text[lang].incomplete;
+      else if(strokeIndex<data().length-1){
+        fb.textContent=text[lang].sDone(strokeIndex+1);
+        strokeIndex++;
+        scene();
+      }else{
+        fb.textContent=text[lang].done(label());
+      }
+
+      points=[];
+    }
+
+    canvas.addEventListener('pointerdown',e=>{
+      if(mode==='watch')return;
+      const path=currentPath();
+      if(!path)return;
+
+      const p=pos(e);
+      const st=path.getPointAtLength(0);
+
+      if(dist(p,st)>75){
+        document.getElementById('feedback').textContent=text[lang].wrongStart;
+        return;
+      }
+
+      drawing=true;
+      points=[p];
+      canvas.setPointerCapture(e.pointerId);
+      ctx.beginPath();
+      ctx.moveTo(p.x,p.y);
+    });
+
+    canvas.addEventListener('pointermove',e=>{
+      if(!drawing)return;
+      const p=pos(e);
+      points.push(p);
+
+      ctx.strokeStyle=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#5b9cff';
+      ctx.lineWidth=isCursive()?11:13;
+      ctx.lineCap='round';
+      ctx.lineJoin='round';
+      ctx.lineTo(p.x,p.y);
+      ctx.stroke();
+    });
+
+    canvas.addEventListener('pointerup',()=>{
+      if(!drawing)return;
+      drawing=false;
+      evaluate();
+    });
+
+    canvas.addEventListener('pointercancel',()=>{
+      drawing=false;
+      points=[];
+    });
+
+    /*
+      累積播放：
+      每一筆完成後不再消失。
+    */
+    function play(){
+      clearTimeout(timer);
+      strokeIndex=0;
+      let i=0;
+
+      function step(){
+        if(i>=data().length){
+          document.getElementById('feedback').textContent=text[lang].ready;
+          return;
+        }
+
+        strokeIndex=i;
+        scene();
+
+        const p=demo.children[i];
+        const L=p.getTotalLength();
+
+        p.style.transition='none';
+        p.style.strokeDasharray=L;
+        p.style.strokeDashoffset=L;
+        p.setAttribute('opacity','1');
+
+        requestAnimationFrame(()=>{
+          p.getBoundingClientRect();
+          p.style.transition='stroke-dashoffset .75s ease';
+          p.style.strokeDashoffset='0';
+        });
+
+        i++;
+        timer=setTimeout(step,900);
+      }
+
+      step();
+    }
+
+    document.querySelectorAll('.lang').forEach(b=>b.addEventListener('click',()=>{
+      lang=b.dataset.lang;
+      applyText();
+      render();
+    }));
+
+    document.querySelectorAll('.style-btn').forEach(b=>b.addEventListener('click',()=>{
+      style=b.dataset.style;
+      strokeIndex=0;
+      clearDrawing();
+      render();
+    }));
+
+    document.querySelectorAll('.mode').forEach(b=>b.addEventListener('click',()=>{
+      mode=b.dataset.mode;
+      strokeIndex=0;
+      clearDrawing();
+      render();
+    }));
+
+    document.getElementById('prevLetter').addEventListener('click',()=>{
+      idx=(idx+25)%26;
+      strokeIndex=0;
+      clearDrawing();
+      render();
+    });
+
+    document.getElementById('nextLetter').addEventListener('click',()=>{
+      idx=(idx+1)%26;
+      strokeIndex=0;
+      clearDrawing();
+      render();
+    });
+
+    document.getElementById('prevStroke').addEventListener('click',()=>{
+      clearTimeout(timer);
+      strokeIndex=Math.max(0,strokeIndex-1);
+      scene();
+    });
+
+    document.getElementById('nextStroke').addEventListener('click',()=>{
+      clearTimeout(timer);
+      strokeIndex=Math.min(data().length-1,strokeIndex+1);
+      scene();
+    });
+
+    document.getElementById('playAll').addEventListener('click',play);
+
+    document.getElementById('clearBtn').addEventListener('click',()=>{
+      clearTimeout(timer);
+      strokeIndex=0;
+      clearDrawing();
+      document.getElementById('feedback').textContent=text[lang].ready;
+    });
+
+    const MASTER_WIDTH=390;
+
+    function scaleFromLeft(){
+      const fit=document.getElementById('viewportFit');
+      const stage=document.getElementById('scaleStage');
+      const app=document.getElementById('app');
+      if(!fit||!stage||!app)return;
+
+      stage.style.transform='scale(1)';
+      fit.style.width=MASTER_WIDTH+'px';
+      fit.style.height='auto';
+
+      const naturalHeight=Math.ceil(app.offsetHeight);
+      const vw=window.innerWidth||document.documentElement.clientWidth||MASTER_WIDTH;
+
+      let scale=vw/MASTER_WIDTH;
+      scale=Math.max(0.5,Math.min(scale,2.2));
+
+      stage.style.transformOrigin='top left';
+      stage.style.transform=`scale(${scale})`;
+
+      fit.style.width=`${Math.ceil(MASTER_WIDTH*scale)}px`;
+      fit.style.height=`${Math.ceil(naturalHeight*scale)}px`;
+    }
+
+    let leftScaleRAF=0;
+
+    function scheduleLeftScale(){
+      cancelAnimationFrame(leftScaleRAF);
+      leftScaleRAF=requestAnimationFrame(scaleFromLeft);
+    }
+
+    window.addEventListener('resize',scheduleLeftScale);
+    if(window.visualViewport){
+      window.visualViewport.addEventListener('resize',scheduleLeftScale);
+    }
+
+    applyText();
+    render();
+    scheduleLeftScale();
+  })();
+  </script>
+</body>
+</html>
