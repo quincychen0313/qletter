@@ -21,6 +21,23 @@
     *{box-sizing:border-box}
     html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC",Arial,sans-serif}
     body{min-height:100vh;padding:24px}
+
+    /* Whole-interface responsive scaling */
+    .viewport-fit{
+      width:100%;
+      overflow:hidden;
+    }
+    .scale-stage{
+      width:960px;
+      max-width:none;
+      margin:0 auto;
+      transform-origin:top center;
+      will-change:transform;
+    }
+    @media (min-width:1100px){
+      .scale-stage{width:960px}
+    }
+
     button{font:inherit;color:inherit}
     .app{width:min(960px,100%);margin:0 auto;display:grid;gap:16px}
     .glass-shell{
@@ -112,7 +129,7 @@
   </style>
 </head>
 <body>
-  <main class="app" id="app">
+  <div id="viewportFit" class="viewport-fit"><div id="scaleStage" class="scale-stage"><main class="app" id="app">
     <section class="topbar">
       <div>
         <div class="brand" id="brandTitle">英文字母書寫練習</div>
@@ -177,7 +194,7 @@
     </section>
 
     <div class="footer-note" id="footerNote">書寫練習會檢查起筆位置、方向、順序與完整度。</div>
-  </main>
+  </main></div></div>
 
 <script>
 (() => {
@@ -386,6 +403,7 @@
     document.getElementById('prevStroke').disabled=!watching;
     document.getElementById('nextStroke').disabled=!watching;
     buildAlphabet(); scene();
+    requestAnimationFrame(scheduleFit);
   }
 
   function clearDrawing(){
@@ -474,7 +492,38 @@
   document.getElementById('playAll').addEventListener('click',play);
   document.getElementById('clearBtn').addEventListener('click',()=>{strokeIndex=0;clearDrawing();document.getElementById('feedback').textContent=text[lang].ready;});
 
+
+  function fitWholeInterface(){
+    const fit=document.getElementById('viewportFit');
+    const stage=document.getElementById('scaleStage');
+    if(!fit||!stage)return;
+
+    // The design canvas is 960px wide. Scale the entire UI proportionally
+    // when the browser becomes narrower; never enlarge beyond 100%.
+    const sidePadding = window.innerWidth <= 520 ? 12 : 24;
+    const available = Math.max(280, window.innerWidth - sidePadding * 2);
+    const baseWidth = 960;
+    const scale = Math.min(1, available / baseWidth);
+
+    stage.style.transform = `scale(${scale})`;
+
+    // Compensate layout height for transform scaling so the page does not
+    // leave a large blank area beneath the scaled interface.
+    const naturalHeight = stage.scrollHeight;
+    fit.style.height = `${Math.ceil(naturalHeight * scale)}px`;
+  }
+
+  let fitRAF=0;
+  function scheduleFit(){
+    cancelAnimationFrame(fitRAF);
+    fitRAF=requestAnimationFrame(fitWholeInterface);
+  }
+
+  window.addEventListener('resize', scheduleFit);
+  if(window.visualViewport) window.visualViewport.addEventListener('resize', scheduleFit);
+
   applyText();render();
+  requestAnimationFrame(()=>{fitWholeInterface();requestAnimationFrame(fitWholeInterface);});
 })();
 </script>
 </body>
