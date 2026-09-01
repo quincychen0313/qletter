@@ -902,6 +902,47 @@
       font-size:12px;
     }
 
+
+    .ws-sequence-wrap{
+      display:grid;
+      gap:6px;
+      padding:10px 12px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      background:var(--panel2);
+    }
+
+    .ws-sequence-label{
+      color:var(--muted);
+      font-size:11px;
+      font-weight:700;
+    }
+
+    .ws-sequence{
+      min-height:34px;
+      display:flex;
+      align-items:center;
+      flex-wrap:wrap;
+      gap:5px;
+      color:var(--text);
+      font-size:20px;
+      font-weight:800;
+      letter-spacing:.04em;
+      word-break:break-all;
+    }
+
+    .ws-sequence-letter{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:28px;
+      height:30px;
+      padding:0 7px;
+      border-radius:8px;
+      background:var(--accent-bg);
+      border:1px solid rgba(59,130,246,.32);
+    }
+
     .ws-letter-picker{
       display:grid;
       grid-template-columns:repeat(7,1fr);
@@ -1145,6 +1186,12 @@
     }
 
     .ws-svg-char.trace{color:#8d99a6}
+
+    .ws-svg-char.trace svg path{
+      stroke-dasharray:8 12 !important;
+      stroke-linecap:butt !important;
+    }
+
     .ws-svg-char.copy-fade{color:#b0b8c2}
 
     .worksheet-page[data-ws-style="cursiveUpper"] .ws-svg-char,
@@ -1157,6 +1204,17 @@
     .worksheet-page[data-ws-style="printLower"] .ws-svg-char{
       width:74px;
       height:74px;
+    }
+
+
+
+
+    .ws-mixed-letter-block{
+      margin-bottom:16px;
+    }
+
+    .ws-mixed-letter-block .ws-line{
+      margin-bottom:0;
     }
 
     @media (max-width:820px){
@@ -1327,7 +1385,7 @@
                 </div>
 
                 <div class="ws-row">
-                  <label class="ws-field">
+                  <label id="wsRowsField" class="ws-field">
                     <span>每字幾列 / Rows</span>
                     <select id="wsRows">
                       <option value="1">1</option>
@@ -1350,6 +1408,11 @@
                   <div class="ws-letter-actions">
                     <button id="wsSelectAll" class="glass-btn ws-mini-btn" type="button">全部</button>
                     <button id="wsClearAll" class="glass-btn ws-mini-btn" type="button">清除</button>
+                    <button id="wsBackspace" class="glass-btn ws-mini-btn" type="button">← 刪除</button>
+                  </div>
+                  <div id="wsSequenceWrap" class="ws-sequence-wrap" hidden>
+                    <div class="ws-sequence-label">選字順序 / Sequence</div>
+                    <div id="wsSequence" class="ws-sequence"></div>
                   </div>
                   <div id="wsLetterPicker" class="ws-letter-picker"></div>
                 </div>
@@ -1366,15 +1429,14 @@
                 </div>
 
                 <div class="worksheet-actions">
-                  <button id="wsGenerate" class="glass-btn primary" type="button">產生預覽</button>
-                  <button id="wsPrint" class="glass-btn" type="button">列印 / PDF</button>
+                  <button id="wsPrint" class="glass-btn primary" type="button">列印 / PDF</button>
                 </div>
               </div>
 
               <div class="worksheet-preview-wrap">
                 <div id="worksheetPreview" class="worksheet-page">
                   <div class="ws-placeholder">
-                    選擇設定後按「產生預覽」
+                    調整左側設定，預覽會即時更新
                   </div>
                 </div>
               </div>
@@ -2475,6 +2537,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = QLETTER_PR
     const worksheetPreview=document.getElementById('worksheetPreview');
 
     let wsSelected=new Set(['A','B','C','D','E','F']);
+    let wsSequence=['A','B','C'];
 
     function wsLettersForStyle(){
       return styleToLetters(wsStyle.value);
@@ -2486,12 +2549,40 @@ if (typeof module !== "undefined" && module.exports) module.exports = QLETTER_PR
         : ABC.slice();
     }
 
+    function renderWsSequence(){
+      const wrap=document.getElementById('wsSequenceWrap');
+      const box=document.getElementById('wsSequence');
+      const mixed=wsMode.value==='mixed';
+
+      wrap.hidden=!mixed;
+      document.getElementById('wsSelectAll').hidden=mixed;
+      const rowsField=document.getElementById('wsRowsField');
+      if(rowsField) rowsField.hidden=mixed;
+
+      if(!mixed){
+        box.innerHTML='';
+        return;
+      }
+
+      if(wsSequence.length===0){
+        box.innerHTML='<span style="color:var(--muted);font-size:12px;font-weight:600">依序點選字母，例如 Q U I N C Y</span>';
+        return;
+      }
+
+      box.innerHTML=wsSequence
+        .map(letter=>`<span class="ws-sequence-letter">${letter}</span>`)
+        .join('');
+    }
+
     function renderWsPicker(){
       const letters=wsLettersForStyle();
       const valid=new Set(letters);
-      wsSelected=new Set([...wsSelected].filter(x=>valid.has(x)));
+      const mixed=wsMode.value==='mixed';
 
-      if(wsSelected.size===0){
+      wsSelected=new Set([...wsSelected].filter(x=>valid.has(x)));
+      wsSequence=wsSequence.filter(x=>valid.has(x));
+
+      if(!mixed && wsSelected.size===0){
         letters.slice(0,6).forEach(x=>wsSelected.add(x));
       }
 
@@ -2499,15 +2590,26 @@ if (typeof module !== "undefined" && module.exports) module.exports = QLETTER_PR
       letters.forEach(letter=>{
         const btn=document.createElement('button');
         btn.type='button';
-        btn.className='ws-letter-chip'+(wsSelected.has(letter)?' active':'');
+        btn.className='ws-letter-chip'+(!mixed && wsSelected.has(letter)?' active':'');
         btn.textContent=letter;
         btn.addEventListener('click',()=>{
+          if(wsMode.value==='mixed'){
+            // Mixed = append in exact click order; duplicates are allowed.
+            wsSequence.push(letter);
+            renderWsSequence();
+            generateWorksheet();
+            return;
+          }
+
           if(wsSelected.has(letter)) wsSelected.delete(letter);
           else wsSelected.add(letter);
           btn.classList.toggle('active',wsSelected.has(letter));
+          generateWorksheet();
         });
         wsLetterPicker.appendChild(btn);
       });
+
+      renderWsSequence();
     }
 
     function openWorksheet(){
@@ -2532,16 +2634,35 @@ if (typeof module !== "undefined" && module.exports) module.exports = QLETTER_PR
       if(e.key==='Escape' && !worksheetPanel.hidden) closeWorksheet();
     });
 
-    wsStyle.addEventListener('change',renderWsPicker);
+    wsStyle.addEventListener('change',()=>{
+      renderWsPicker();
+      generateWorksheet();
+    });
+
+    wsMode.addEventListener('change',()=>{
+      renderWsPicker();
+      generateWorksheet();
+    });
 
     document.getElementById('wsSelectAll').addEventListener('click',()=>{
       wsSelected=new Set(wsLettersForStyle());
       renderWsPicker();
+      generateWorksheet();
     });
 
     document.getElementById('wsClearAll').addEventListener('click',()=>{
-      wsSelected.clear();
+      if(wsMode.value==='mixed') wsSequence=[];
+      else wsSelected.clear();
       renderWsPicker();
+      generateWorksheet();
+    });
+
+    document.getElementById('wsBackspace').addEventListener('click',()=>{
+      if(wsMode.value==='mixed' && wsSequence.length){
+        wsSequence.pop();
+        renderWsSequence();
+        generateWorksheet();
+      }
     });
 
     function wsDataForStyle(styleName, letter){
@@ -2556,11 +2677,16 @@ if (typeof module !== "undefined" && module.exports) module.exports = QLETTER_PR
       }
 
       const paths=strokes.map(s=>{
-        const opacity = variant==='trace' ? '.30' : variant==='copy-fade' ? '.18' : '1';
-        const dash = variant==='trace' ? ' stroke-dasharray="4 5"' : '';
+        const isTrace = variant==='trace';
+        const opacity = isTrace ? '.78' : variant==='copy-fade' ? '.22' : '1';
+        const dash = isTrace ? ' stroke-dasharray="8 12"' : '';
+        const width = isTrace
+          ? (wsStyle.value.startsWith('cursive') ? '8' : '18')
+          : (wsStyle.value.startsWith('cursive') ? '11' : '30');
+        const linecap = isTrace ? 'butt' : 'round';
         return `<path d="${s.d}" fill="none" stroke="currentColor"
-          stroke-width="${wsStyle.value.startsWith('cursive') ? 11 : 30}"
-          stroke-linecap="round" stroke-linejoin="round"
+          stroke-width="${width}"
+          stroke-linecap="${linecap}" stroke-linejoin="round"
           opacity="${opacity}"${dash}/>`;
       }).join('');
 
@@ -2574,7 +2700,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = QLETTER_PR
         return wsSvgForLetter(letter,'trace').repeat(5);
       }
       if(mode==='copy'){
-        return `${wsSvgForLetter(letter,'model')}${wsSvgForLetter(letter,'copy-fade')}<span class="ws-free-space"></span>`;
+        return `${wsSvgForLetter(letter,'model')}${wsSvgForLetter(letter,'trace')}<span class="ws-free-space"></span>`;
       }
       if(mode==='free'){
         return `${wsSvgForLetter(letter,'model')}<span class="ws-free-space"></span>`;
@@ -2582,10 +2708,49 @@ if (typeof module !== "undefined" && module.exports) module.exports = QLETTER_PR
       return `${wsSvgForLetter(letter,'trace')}${wsSvgForLetter(letter,'trace')}${wsSvgForLetter(letter,'model')}<span class="ws-free-space"></span>`;
     }
 
+
+    function wsMixedWordHTML(sequence){
+      return sequence.map((letter,index)=>{
+        // Mixed worksheet: keep exact selected order.
+        // First occurrence style alternates model / trace to make a usable practice line.
+        const variant = index===0 ? 'model' : 'trace';
+        return wsSvgForLetter(letter,variant);
+      }).join('');
+    }
+
+    function wsMixedPracticeBlock(sequence){
+      let content='';
+
+      sequence.forEach((letter,index)=>{
+        content+=`<div class="ws-practice-block ws-mixed-letter-block">
+          <div class="ws-practice-label">${letter}</div>
+          <div class="ws-line">
+            <span class="ws-guide-label ws-guide-top">top</span>
+            <span class="ws-guide-label ws-guide-mid">x-height</span>
+            <span class="ws-guide-label ws-guide-base">baseline</span>
+            <div class="ws-models">
+              ${wsSvgForLetter(letter,'model')}
+              ${wsSvgForLetter(letter,'trace')}
+              <span class="ws-free-space"></span>
+            </div>
+          </div>
+        </div>`;
+      });
+
+      return content;
+    }
+
+      block+='</div>';
+      return block;
+    }
+
     function generateWorksheet(){
-      const letters=[...wsSelected];
+      const isMixed=wsMode.value==='mixed';
+      const letters=isMixed ? [...wsSequence] : [...wsSelected];
       if(letters.length===0){
-        worksheetPreview.innerHTML='<div class="ws-placeholder">請至少選擇一個字母</div>';
+        worksheetPreview.innerHTML=`<div class="ws-placeholder">${
+          isMixed ? '請依序點選字母，例如 Q U I N C Y' : '請至少選擇一個字母'
+        }</div>`;
         return;
       }
 
@@ -2602,18 +2767,23 @@ if (typeof module !== "undefined" && module.exports) module.exports = QLETTER_PR
       }
 
       const rows=Math.max(1,Math.min(3,Number(wsRows.value)||2));
-      letters.forEach(letter=>{
-        content+=`<div class="ws-practice-block"><div class="ws-practice-label">${letter}</div>`;
-        for(let r=0;r<rows;r++){
-          content+=`<div class="ws-line">
-            <span class="ws-guide-label ws-guide-top">top</span>
-            <span class="ws-guide-label ws-guide-mid">x-height</span>
-            <span class="ws-guide-label ws-guide-base">baseline</span>
-            <div class="ws-models">${wsCharHTML(letter,wsMode.value)}</div>
-          </div>`;
-        }
-        content+='</div>';
-      });
+
+      if(isMixed){
+        content+=wsMixedPracticeBlock(letters);
+      }else{
+        letters.forEach(letter=>{
+          content+=`<div class="ws-practice-block"><div class="ws-practice-label">${letter}</div>`;
+          for(let r=0;r<rows;r++){
+            content+=`<div class="ws-line">
+              <span class="ws-guide-label ws-guide-top">top</span>
+              <span class="ws-guide-label ws-guide-mid">x-height</span>
+              <span class="ws-guide-label ws-guide-base">baseline</span>
+              <div class="ws-models">${wsCharHTML(letter,wsMode.value)}</div>
+            </div>`;
+          }
+          content+='</div>';
+        });
+      }
 
       worksheetPreview.innerHTML=content;
     }
@@ -2624,7 +2794,24 @@ if (typeof module !== "undefined" && module.exports) module.exports = QLETTER_PR
       }[ch]));
     }
 
-    document.getElementById('wsGenerate').addEventListener('click',generateWorksheet);
+
+    function refreshWorksheetLive(){
+      generateWorksheet();
+    }
+
+    // 即時預覽：所有設定一變更就立即更新。
+    [
+      wsStyle,
+      wsRows,
+      wsPaper,
+      wsTitleInput,
+      wsShowName,
+      wsShowDate
+    ].forEach(control=>{
+      control.addEventListener('input',refreshWorksheetLive);
+      control.addEventListener('change',refreshWorksheetLive);
+    });
+
     document.getElementById('wsPrint').addEventListener('click',()=>{
       generateWorksheet();
       setTimeout(()=>window.print(),80);
