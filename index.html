@@ -776,6 +776,318 @@
       }
     }
 
+  
+    .worksheet-launch{
+      display:flex;
+      justify-content:flex-start;
+    }
+
+    .worksheet-main-btn{
+      min-width:140px;
+      min-height:42px;
+      padding:0 18px;
+    }
+
+    .worksheet-panel[hidden]{display:none}
+
+    .worksheet-panel{
+      position:fixed;
+      inset:0;
+      z-index:9999;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+    }
+
+    .worksheet-backdrop{
+      position:absolute;
+      inset:0;
+      background:rgba(0,0,0,.58);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+    }
+
+    .worksheet-dialog{
+      position:relative;
+      z-index:1;
+      width:min(1180px,96vw);
+      max-height:94vh;
+      overflow:auto;
+      border:1px solid var(--border);
+      border-radius:24px;
+      background:var(--bg);
+      box-shadow:0 24px 80px rgba(0,0,0,.35);
+      padding:20px;
+    }
+
+    .worksheet-header{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:18px;
+    }
+
+    .worksheet-kicker{
+      color:var(--muted);
+      font-size:12px;
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+
+    .worksheet-header h2{
+      margin:4px 0 0;
+      font-size:24px;
+    }
+
+    .worksheet-close{
+      width:40px;
+      height:40px;
+      min-height:40px;
+      padding:0;
+      font-size:22px;
+    }
+
+    .worksheet-builder-grid{
+      display:grid;
+      grid-template-columns:minmax(280px,360px) minmax(0,1fr);
+      gap:20px;
+      align-items:start;
+    }
+
+    .worksheet-settings{
+      display:grid;
+      gap:14px;
+      position:sticky;
+      top:0;
+    }
+
+    .ws-row{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .ws-field{
+      display:grid;
+      gap:7px;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:700;
+    }
+
+    .ws-field input,
+    .ws-field select{
+      width:100%;
+      min-height:42px;
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:0 12px;
+      background:var(--panel);
+      color:var(--text);
+      font:inherit;
+      outline:none;
+    }
+
+    .ws-letter-actions{
+      display:flex;
+      gap:6px;
+    }
+
+    .ws-mini-btn{
+      min-height:32px;
+      padding:0 10px;
+      font-size:12px;
+    }
+
+    .ws-letter-picker{
+      display:grid;
+      grid-template-columns:repeat(7,1fr);
+      gap:6px;
+    }
+
+    .ws-letter-chip{
+      min-height:34px;
+      border:1px solid var(--border);
+      border-radius:10px;
+      background:var(--panel);
+      color:var(--text);
+      cursor:pointer;
+      font-weight:800;
+    }
+
+    .ws-letter-chip.active{
+      border-color:var(--accent);
+      background:var(--accent-bg);
+    }
+
+    .ws-check{
+      display:flex;
+      align-items:center;
+      gap:7px;
+      color:var(--muted);
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .worksheet-actions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .worksheet-preview-wrap{
+      overflow:auto;
+      padding:8px;
+      border:1px solid var(--border);
+      border-radius:18px;
+      background:var(--panel2);
+    }
+
+    .worksheet-page{
+      width:794px;
+      min-height:1123px;
+      margin:0 auto;
+      background:#fff;
+      color:#111;
+      box-shadow:0 12px 36px rgba(0,0,0,.18);
+      padding:42px 48px;
+      font-family:Arial,Helvetica,sans-serif;
+    }
+
+    .worksheet-page.letter-paper{
+      width:816px;
+      min-height:1056px;
+    }
+
+    .ws-placeholder{
+      display:grid;
+      place-items:center;
+      min-height:420px;
+      color:#999;
+      font-size:18px;
+    }
+
+    .ws-sheet-title{
+      text-align:center;
+      font-size:26px;
+      font-weight:800;
+      margin-bottom:18px;
+    }
+
+    .ws-meta{
+      display:flex;
+      justify-content:space-between;
+      gap:20px;
+      font-size:14px;
+      margin-bottom:24px;
+    }
+
+    .ws-meta-line{
+      flex:1;
+      border-bottom:1px solid #666;
+      padding-bottom:5px;
+    }
+
+    .ws-practice-block{
+      margin-bottom:18px;
+      break-inside:avoid;
+    }
+
+    .ws-practice-label{
+      font-size:13px;
+      font-weight:700;
+      margin-bottom:6px;
+      color:#555;
+    }
+
+    .ws-line{
+      position:relative;
+      height:92px;
+      margin-bottom:8px;
+      border-top:1px solid #cbd5e1;
+      border-bottom:2px solid #94a3b8;
+      overflow:hidden;
+    }
+
+    .ws-line::before{
+      content:"";
+      position:absolute;
+      left:0;right:0;
+      top:45%;
+      border-top:1px dashed #cbd5e1;
+    }
+
+    .ws-line::after{
+      content:"";
+      position:absolute;
+      left:0;right:0;
+      top:72%;
+      border-top:1px solid #e2e8f0;
+    }
+
+    .ws-models{
+      position:relative;
+      z-index:1;
+      height:100%;
+      display:flex;
+      align-items:flex-end;
+      gap:26px;
+      padding:0 14px 10px;
+    }
+
+    .ws-model-char{
+      font-size:64px;
+      line-height:.95;
+      font-weight:500;
+      color:#111;
+    }
+
+    .ws-model-char.trace{
+      color:#c8c8c8;
+      -webkit-text-stroke:1px #aaa;
+    }
+
+    .ws-model-char.copy-fade{
+      color:#d8d8d8;
+    }
+
+    .ws-free-space{
+      flex:1;
+      min-width:70px;
+    }
+
+    @media (max-width:820px){
+      .worksheet-panel{padding:8px}
+      .worksheet-dialog{width:100%;max-height:97vh;padding:14px}
+      .worksheet-builder-grid{grid-template-columns:1fr}
+      .worksheet-settings{position:static}
+      .worksheet-preview-wrap{max-width:100%}
+      .worksheet-page{
+        transform-origin:top left;
+      }
+    }
+
+    @media print{
+      body *{visibility:hidden !important}
+      #worksheetPreview,
+      #worksheetPreview *{visibility:visible !important}
+      #worksheetPreview{
+        position:absolute;
+        left:0;
+        top:0;
+        width:100% !important;
+        min-height:0 !important;
+        box-shadow:none !important;
+        margin:0 !important;
+      }
+      @page{
+        margin:10mm;
+      }
+    }
+
   </style>
 </head>
 
@@ -816,6 +1128,12 @@
           <button type="button" class="glass-btn style-btn" data-style="printLower">印刷體小寫</button>
           <button type="button" class="glass-btn style-btn" data-style="cursiveUpper">草寫大寫</button>
           <button type="button" class="glass-btn style-btn" data-style="cursiveLower">草寫小寫</button>
+        </section>
+
+        <section class="worksheet-launch">
+          <button id="worksheetBtn" class="glass-btn worksheet-main-btn" type="button">
+            Worksheet
+          </button>
         </section>
 
         <section class="glass-shell letter-card">
@@ -863,6 +1181,104 @@
           <div class="feedback-row">
             <div id="feedback" class="feedback" aria-live="polite">準備好了。</div>
             <button id="clearBtn" class="glass-btn clear" type="button">清除重寫</button>
+          </div>
+        </section>
+
+
+        <section id="worksheetPanel" class="worksheet-panel" hidden>
+          <div class="worksheet-backdrop" data-close-worksheet></div>
+
+          <div class="worksheet-dialog">
+            <div class="worksheet-header">
+              <div>
+                <div class="worksheet-kicker">Worksheet Builder</div>
+                <h2 id="worksheetTitle">字母練習單產生器</h2>
+              </div>
+              <button id="worksheetClose" class="glass-btn worksheet-close" type="button" aria-label="關閉">×</button>
+            </div>
+
+            <div class="worksheet-builder-grid">
+              <div class="worksheet-settings">
+                <label class="ws-field">
+                  <span>標題 / Title</span>
+                  <input id="wsTitleInput" type="text" value="English Letter Practice" />
+                </label>
+
+                <div class="ws-row">
+                  <label class="ws-field">
+                    <span>字體 / Style</span>
+                    <select id="wsStyle">
+                      <option value="printUpper">印刷體大寫</option>
+                      <option value="printLower">印刷體小寫</option>
+                      <option value="cursiveUpper">草寫大寫</option>
+                      <option value="cursiveLower">草寫小寫</option>
+                    </select>
+                  </label>
+
+                  <label class="ws-field">
+                    <span>模式 / Mode</span>
+                    <select id="wsMode">
+                      <option value="trace">描寫 Trace</option>
+                      <option value="copy">臨摹 Copy</option>
+                      <option value="free">自由書寫 Free</option>
+                      <option value="mixed">混合 Mixed</option>
+                    </select>
+                  </label>
+                </div>
+
+                <div class="ws-row">
+                  <label class="ws-field">
+                    <span>每字幾列 / Rows</span>
+                    <select id="wsRows">
+                      <option value="1">1</option>
+                      <option value="2" selected>2</option>
+                      <option value="3">3</option>
+                    </select>
+                  </label>
+
+                  <label class="ws-field">
+                    <span>紙張 / Paper</span>
+                    <select id="wsPaper">
+                      <option value="a4" selected>A4</option>
+                      <option value="letter">US Letter</option>
+                    </select>
+                  </label>
+                </div>
+
+                <div class="ws-field">
+                  <span>選擇字母 / Letters</span>
+                  <div class="ws-letter-actions">
+                    <button id="wsSelectAll" class="glass-btn ws-mini-btn" type="button">全部</button>
+                    <button id="wsClearAll" class="glass-btn ws-mini-btn" type="button">清除</button>
+                  </div>
+                  <div id="wsLetterPicker" class="ws-letter-picker"></div>
+                </div>
+
+                <div class="ws-row">
+                  <label class="ws-check">
+                    <input id="wsShowName" type="checkbox" checked />
+                    <span>姓名欄</span>
+                  </label>
+                  <label class="ws-check">
+                    <input id="wsShowDate" type="checkbox" checked />
+                    <span>日期欄</span>
+                  </label>
+                </div>
+
+                <div class="worksheet-actions">
+                  <button id="wsGenerate" class="glass-btn primary" type="button">產生預覽</button>
+                  <button id="wsPrint" class="glass-btn" type="button">列印 / PDF</button>
+                </div>
+              </div>
+
+              <div class="worksheet-preview-wrap">
+                <div id="worksheetPreview" class="worksheet-page">
+                  <div class="ws-placeholder">
+                    選擇設定後按「產生預覽」
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -1941,6 +2357,146 @@ if (typeof module !== "undefined" && module.exports) module.exports = QLETTER_PR
       strokeIndex=0;
       clearDrawing();
       document.getElementById('feedback').textContent=text[lang].ready;
+    });
+
+
+    // ===== Worksheet Builder =====
+    const worksheetPanel=document.getElementById('worksheetPanel');
+    const worksheetBtn=document.getElementById('worksheetBtn');
+    const worksheetClose=document.getElementById('worksheetClose');
+    const wsLetterPicker=document.getElementById('wsLetterPicker');
+    const wsStyle=document.getElementById('wsStyle');
+    const wsMode=document.getElementById('wsMode');
+    const wsRows=document.getElementById('wsRows');
+    const wsPaper=document.getElementById('wsPaper');
+    const wsTitleInput=document.getElementById('wsTitleInput');
+    const wsShowName=document.getElementById('wsShowName');
+    const wsShowDate=document.getElementById('wsShowDate');
+    const worksheetPreview=document.getElementById('worksheetPreview');
+
+    let wsSelected=new Set(['A','B','C','D','E','F']);
+
+    function wsLettersForStyle(){
+      return styleToLetters(wsStyle.value);
+    }
+
+    function styleToLetters(styleName){
+      return styleName.endsWith('Lower')
+        ? ABC.map(x=>x.toLowerCase())
+        : ABC.slice();
+    }
+
+    function renderWsPicker(){
+      const letters=wsLettersForStyle();
+      const valid=new Set(letters);
+      wsSelected=new Set([...wsSelected].filter(x=>valid.has(x)));
+
+      if(wsSelected.size===0){
+        letters.slice(0,6).forEach(x=>wsSelected.add(x));
+      }
+
+      wsLetterPicker.innerHTML='';
+      letters.forEach(letter=>{
+        const btn=document.createElement('button');
+        btn.type='button';
+        btn.className='ws-letter-chip'+(wsSelected.has(letter)?' active':'');
+        btn.textContent=letter;
+        btn.addEventListener('click',()=>{
+          if(wsSelected.has(letter)) wsSelected.delete(letter);
+          else wsSelected.add(letter);
+          btn.classList.toggle('active',wsSelected.has(letter));
+        });
+        wsLetterPicker.appendChild(btn);
+      });
+    }
+
+    function openWorksheet(){
+      worksheetPanel.hidden=false;
+      document.body.style.overflow='hidden';
+      renderWsPicker();
+      generateWorksheet();
+    }
+
+    function closeWorksheet(){
+      worksheetPanel.hidden=true;
+      document.body.style.overflow='';
+    }
+
+    worksheetBtn.addEventListener('click',openWorksheet);
+    worksheetClose.addEventListener('click',closeWorksheet);
+    worksheetPanel.querySelectorAll('[data-close-worksheet]').forEach(el=>{
+      el.addEventListener('click',closeWorksheet);
+    });
+
+    document.addEventListener('keydown',e=>{
+      if(e.key==='Escape' && !worksheetPanel.hidden) closeWorksheet();
+    });
+
+    wsStyle.addEventListener('change',renderWsPicker);
+
+    document.getElementById('wsSelectAll').addEventListener('click',()=>{
+      wsSelected=new Set(wsLettersForStyle());
+      renderWsPicker();
+    });
+
+    document.getElementById('wsClearAll').addEventListener('click',()=>{
+      wsSelected.clear();
+      renderWsPicker();
+    });
+
+    function wsCharHTML(letter,mode){
+      if(mode==='trace'){
+        return `<span class="ws-model-char trace">${letter}</span>`.repeat(6);
+      }
+      if(mode==='copy'){
+        return `<span class="ws-model-char">${letter}</span><span class="ws-model-char copy-fade">${letter}</span><span class="ws-free-space"></span>`;
+      }
+      if(mode==='free'){
+        return `<span class="ws-model-char">${letter}</span><span class="ws-free-space"></span>`;
+      }
+      return `<span class="ws-model-char trace">${letter}</span><span class="ws-model-char trace">${letter}</span><span class="ws-model-char">${letter}</span><span class="ws-free-space"></span>`;
+    }
+
+    function generateWorksheet(){
+      const letters=[...wsSelected];
+      if(letters.length===0){
+        worksheetPreview.innerHTML='<div class="ws-placeholder">請至少選擇一個字母</div>';
+        return;
+      }
+
+      worksheetPreview.classList.toggle('letter-paper',wsPaper.value==='letter');
+
+      let content=`<div class="ws-sheet-title">${escapeHtml(wsTitleInput.value || 'English Letter Practice')}</div>`;
+
+      if(wsShowName.checked || wsShowDate.checked){
+        content+='<div class="ws-meta">';
+        if(wsShowName.checked) content+='<div class="ws-meta-line">Name:</div>';
+        if(wsShowDate.checked) content+='<div class="ws-meta-line">Date:</div>';
+        content+='</div>';
+      }
+
+      const rows=Math.max(1,Math.min(3,Number(wsRows.value)||2));
+      letters.forEach(letter=>{
+        content+=`<div class="ws-practice-block"><div class="ws-practice-label">${letter}</div>`;
+        for(let r=0;r<rows;r++){
+          content+=`<div class="ws-line"><div class="ws-models">${wsCharHTML(letter,wsMode.value)}</div></div>`;
+        }
+        content+='</div>';
+      });
+
+      worksheetPreview.innerHTML=content;
+    }
+
+    function escapeHtml(value){
+      return String(value).replace(/[&<>"']/g,ch=>({
+        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
+      }[ch]));
+    }
+
+    document.getElementById('wsGenerate').addEventListener('click',generateWorksheet);
+    document.getElementById('wsPrint').addEventListener('click',()=>{
+      generateWorksheet();
+      setTimeout(()=>window.print(),80);
     });
 
     applyText();
