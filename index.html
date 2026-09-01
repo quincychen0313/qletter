@@ -1004,48 +1004,101 @@
     }
 
     .ws-line{
+      --guide-top:12%;
+      --guide-mid:45%;
+      --guide-base:76%;
+      --guide-bottom:94%;
       position:relative;
-      height:92px;
-      margin-bottom:8px;
-      border-top:1px solid #cbd5e1;
-      border-bottom:2px solid #94a3b8;
+      height:108px;
+      margin-bottom:10px;
       overflow:hidden;
+      background:
+        linear-gradient(
+          to bottom,
+          transparent calc(var(--guide-top) - .5px),
+          #cbd5e1 calc(var(--guide-top) - .5px),
+          #cbd5e1 calc(var(--guide-top) + .5px),
+          transparent calc(var(--guide-top) + .5px)
+        ),
+        linear-gradient(
+          to bottom,
+          transparent calc(var(--guide-mid) - .5px),
+          #cbd5e1 calc(var(--guide-mid) - .5px),
+          #cbd5e1 calc(var(--guide-mid) + .5px),
+          transparent calc(var(--guide-mid) + .5px)
+        ),
+        linear-gradient(
+          to bottom,
+          transparent calc(var(--guide-base) - 1px),
+          #64748b calc(var(--guide-base) - 1px),
+          #64748b calc(var(--guide-base) + 1px),
+          transparent calc(var(--guide-base) + 1px)
+        ),
+        linear-gradient(
+          to bottom,
+          transparent calc(var(--guide-bottom) - .5px),
+          #e2e8f0 calc(var(--guide-bottom) - .5px),
+          #e2e8f0 calc(var(--guide-bottom) + .5px),
+          transparent calc(var(--guide-bottom) + .5px)
+        );
     }
 
     .ws-line::before{
       content:"";
       position:absolute;
       left:0;right:0;
-      top:45%;
+      top:var(--guide-mid);
       border-top:1px dashed #cbd5e1;
+      transform:translateY(-.5px);
+      pointer-events:none;
     }
 
     .ws-line::after{
       content:"";
       position:absolute;
       left:0;right:0;
-      top:72%;
-      border-top:1px solid #e2e8f0;
+      top:var(--guide-base);
+      border-top:1px solid #64748b;
+      transform:translateY(-1px);
+      pointer-events:none;
     }
 
     .ws-models{
-      position:relative;
+      position:absolute;
       z-index:1;
-      height:100%;
+      left:14px;
+      right:14px;
+      top:0;
+      height:var(--guide-base);
       display:flex;
       align-items:flex-end;
       gap:26px;
-      padding:0 14px 10px;
+      padding:0;
+      overflow:visible;
     }
 
     .ws-model-char{
+      display:inline-block;
       font-size:64px;
-      line-height:.95;
+      line-height:1;
       font-weight:500;
       color:#111;
+      transform:translateY(5px);
+      transform-origin:left bottom;
     }
 
-    .ws-model-char.trace{
+    
+    .worksheet-page[data-ws-style="printUpper"] .ws-model-char,
+    .worksheet-page[data-ws-style="cursiveUpper"] .ws-model-char{
+      font-size:68px;
+    }
+
+    .worksheet-page[data-ws-style="printLower"] .ws-model-char,
+    .worksheet-page[data-ws-style="cursiveLower"] .ws-model-char{
+      font-size:62px;
+    }
+
+.ws-model-char.trace{
       color:#c8c8c8;
       -webkit-text-stroke:1px #aaa;
     }
@@ -1057,6 +1110,53 @@
     .ws-free-space{
       flex:1;
       min-width:70px;
+    }
+
+    
+    .ws-guide-label{
+      position:absolute;
+      right:4px;
+      z-index:0;
+      font-size:8px;
+      color:#cbd5e1;
+      line-height:1;
+      pointer-events:none;
+    }
+    .ws-guide-top{top:calc(var(--guide-top) - 10px)}
+    .ws-guide-mid{top:calc(var(--guide-mid) - 10px)}
+    .ws-guide-base{top:calc(var(--guide-base) - 10px)}
+
+
+    .ws-svg-char{
+      display:inline-flex;
+      width:72px;
+      height:72px;
+      align-items:flex-end;
+      justify-content:center;
+      color:#111;
+      flex:0 0 auto;
+      transform:translateY(3px);
+    }
+
+    .ws-svg-char svg{
+      width:100%;
+      height:100%;
+      overflow:visible;
+    }
+
+    .ws-svg-char.trace{color:#8d99a6}
+    .ws-svg-char.copy-fade{color:#b0b8c2}
+
+    .worksheet-page[data-ws-style="cursiveUpper"] .ws-svg-char,
+    .worksheet-page[data-ws-style="cursiveLower"] .ws-svg-char{
+      width:82px;
+      height:82px;
+    }
+
+    .worksheet-page[data-ws-style="printUpper"] .ws-svg-char,
+    .worksheet-page[data-ws-style="printLower"] .ws-svg-char{
+      width:74px;
+      height:74px;
     }
 
     @media (max-width:820px){
@@ -2444,17 +2544,42 @@ if (typeof module !== "undefined" && module.exports) module.exports = QLETTER_PR
       renderWsPicker();
     });
 
+    function wsDataForStyle(styleName, letter){
+      const sets={printUpper,printLower,cursiveUpper,cursiveLower};
+      return sets[styleName]?.[letter] || [];
+    }
+
+    function wsSvgForLetter(letter, variant='model'){
+      const strokes=wsDataForStyle(wsStyle.value, letter);
+      if(!strokes.length){
+        return `<span class="ws-model-char">${letter}</span>`;
+      }
+
+      const paths=strokes.map(s=>{
+        const opacity = variant==='trace' ? '.30' : variant==='copy-fade' ? '.18' : '1';
+        const dash = variant==='trace' ? ' stroke-dasharray="4 5"' : '';
+        return `<path d="${s.d}" fill="none" stroke="currentColor"
+          stroke-width="${wsStyle.value.startsWith('cursive') ? 11 : 30}"
+          stroke-linecap="round" stroke-linejoin="round"
+          opacity="${opacity}"${dash}/>`;
+      }).join('');
+
+      return `<span class="ws-svg-char ${variant}">
+        <svg viewBox="0 0 600 600" preserveAspectRatio="xMidYMid meet" aria-hidden="true">${paths}</svg>
+      </span>`;
+    }
+
     function wsCharHTML(letter,mode){
       if(mode==='trace'){
-        return `<span class="ws-model-char trace">${letter}</span>`.repeat(6);
+        return wsSvgForLetter(letter,'trace').repeat(5);
       }
       if(mode==='copy'){
-        return `<span class="ws-model-char">${letter}</span><span class="ws-model-char copy-fade">${letter}</span><span class="ws-free-space"></span>`;
+        return `${wsSvgForLetter(letter,'model')}${wsSvgForLetter(letter,'copy-fade')}<span class="ws-free-space"></span>`;
       }
       if(mode==='free'){
-        return `<span class="ws-model-char">${letter}</span><span class="ws-free-space"></span>`;
+        return `${wsSvgForLetter(letter,'model')}<span class="ws-free-space"></span>`;
       }
-      return `<span class="ws-model-char trace">${letter}</span><span class="ws-model-char trace">${letter}</span><span class="ws-model-char">${letter}</span><span class="ws-free-space"></span>`;
+      return `${wsSvgForLetter(letter,'trace')}${wsSvgForLetter(letter,'trace')}${wsSvgForLetter(letter,'model')}<span class="ws-free-space"></span>`;
     }
 
     function generateWorksheet(){
@@ -2465,6 +2590,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = QLETTER_PR
       }
 
       worksheetPreview.classList.toggle('letter-paper',wsPaper.value==='letter');
+      worksheetPreview.setAttribute('data-ws-style', wsStyle.value);
 
       let content=`<div class="ws-sheet-title">${escapeHtml(wsTitleInput.value || 'English Letter Practice')}</div>`;
 
@@ -2479,7 +2605,12 @@ if (typeof module !== "undefined" && module.exports) module.exports = QLETTER_PR
       letters.forEach(letter=>{
         content+=`<div class="ws-practice-block"><div class="ws-practice-label">${letter}</div>`;
         for(let r=0;r<rows;r++){
-          content+=`<div class="ws-line"><div class="ws-models">${wsCharHTML(letter,wsMode.value)}</div></div>`;
+          content+=`<div class="ws-line">
+            <span class="ws-guide-label ws-guide-top">top</span>
+            <span class="ws-guide-label ws-guide-mid">x-height</span>
+            <span class="ws-guide-label ws-guide-base">baseline</span>
+            <div class="ws-models">${wsCharHTML(letter,wsMode.value)}</div>
+          </div>`;
         }
         content+='</div>';
       });
