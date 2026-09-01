@@ -1207,14 +1207,23 @@
     }
 
 
-
-
-    .ws-mixed-letter-block{
-      margin-bottom:16px;
+    .ws-word-models{
+      gap:6px;
+      align-items:flex-end;
+      overflow:hidden;
     }
 
-    .ws-mixed-letter-block .ws-line{
-      margin-bottom:0;
+    .ws-word-models .ws-svg-char{
+      width:58px;
+      height:72px;
+      flex:0 0 58px;
+    }
+
+    .worksheet-page[data-ws-style="cursiveUpper"] .ws-word-models .ws-svg-char,
+    .worksheet-page[data-ws-style="cursiveLower"] .ws-word-models .ws-svg-char{
+      width:62px;
+      height:76px;
+      flex-basis:62px;
     }
 
     @media (max-width:820px){
@@ -1385,7 +1394,7 @@
                 </div>
 
                 <div class="ws-row">
-                  <label id="wsRowsField" class="ws-field">
+                  <label class="ws-field">
                     <span>每字幾列 / Rows</span>
                     <select id="wsRows">
                       <option value="1">1</option>
@@ -2556,8 +2565,6 @@ if (typeof module !== "undefined" && module.exports) module.exports = QLETTER_PR
 
       wrap.hidden=!mixed;
       document.getElementById('wsSelectAll').hidden=mixed;
-      const rowsField=document.getElementById('wsRowsField');
-      if(rowsField) rowsField.hidden=mixed;
 
       if(!mixed){
         box.innerHTML='';
@@ -2718,27 +2725,19 @@ if (typeof module !== "undefined" && module.exports) module.exports = QLETTER_PR
       }).join('');
     }
 
-    function wsMixedPracticeBlock(sequence){
-      let content='';
+    function wsMixedPracticeBlock(sequence, rows){
+      const word=sequence.join('');
+      let block=`<div class="ws-practice-block">
+        <div class="ws-practice-label">${word}</div>`;
 
-      sequence.forEach((letter,index)=>{
-        content+=`<div class="ws-practice-block ws-mixed-letter-block">
-          <div class="ws-practice-label">${letter}</div>
-          <div class="ws-line">
-            <span class="ws-guide-label ws-guide-top">top</span>
-            <span class="ws-guide-label ws-guide-mid">x-height</span>
-            <span class="ws-guide-label ws-guide-base">baseline</span>
-            <div class="ws-models">
-              ${wsSvgForLetter(letter,'model')}
-              ${wsSvgForLetter(letter,'trace')}
-              <span class="ws-free-space"></span>
-            </div>
-          </div>
+      for(let r=0;r<rows;r++){
+        block+=`<div class="ws-line">
+          <span class="ws-guide-label ws-guide-top">top</span>
+          <span class="ws-guide-label ws-guide-mid">x-height</span>
+          <span class="ws-guide-label ws-guide-base">baseline</span>
+          <div class="ws-models ws-word-models">${wsMixedWordHTML(sequence)}</div>
         </div>`;
-      });
-
-      return content;
-    }
+      }
 
       block+='</div>';
       return block;
@@ -2769,7 +2768,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = QLETTER_PR
       const rows=Math.max(1,Math.min(3,Number(wsRows.value)||2));
 
       if(isMixed){
-        content+=wsMixedPracticeBlock(letters);
+        content+=wsMixedPracticeBlock(letters,rows);
       }else{
         letters.forEach(letter=>{
           content+=`<div class="ws-practice-block"><div class="ws-practice-label">${letter}</div>`;
