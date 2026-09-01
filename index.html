@@ -30,31 +30,37 @@
 
     body{
       min-height:100vh;
+      margin:0;
       padding:0;
       overflow:auto;
       background:var(--bg);
+      text-align:left;
     }
 
-    /* 永遠以左側為基準縮放 */
+    /* 真正的 CSS RWD：最大 390px、永遠靠左、不使用 transform 縮放 */
     .viewport-fit{
       position:relative;
-      width:390px;
-      height:auto;
+      width:min(390px,100vw);
+      max-width:390px;
+      min-width:0;
       margin:0;
       padding:0;
       overflow:visible;
     }
 
     .scale-stage{
-      width:390px;
+      width:100%;
+      max-width:390px;
+      min-width:0;
       margin:0;
       padding:0;
-      transform-origin:top left;
-      will-change:transform;
+      transform:none !important;
     }
 
     .app{
-      width:390px;
+      width:100%;
+      max-width:390px;
+      min-width:0;
       margin:0;
       padding:10px;
       display:grid;
@@ -74,7 +80,7 @@
 
     .glass-btn{
       position:relative;
-      min-height:44px;
+      min-height:38px;
       border:1px solid rgba(255,255,255,.14);
       border-radius:999px;
       padding:0 18px;
@@ -105,37 +111,37 @@
     .glass-btn:disabled{opacity:.35;cursor:not-allowed;transform:none}
 
     .topbar{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
-    .brand{font-size:clamp(20px,5.6vw,30px);font-weight:800;letter-spacing:-.03em}
+    .brand{font-size:clamp(20px,5.6vw,26px);font-weight:800;letter-spacing:-.03em}
     .subtitle{color:var(--muted);font-size:13px;margin-top:4px}
     .lang-switch{display:inline-flex;padding:4px;border-radius:999px}
     .lang{min-height:38px;padding:0 14px}
 
-    .styles{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-    .style-btn{border-radius:18px;min-height:44px;padding:0 10px;font-size:.88rem}
+    .styles{display:grid;grid-template-columns:repeat(2,max-content);justify-content:start;align-items:center;gap:8px}
+    .style-btn{width:auto;min-width:0;min-height:38px;border-radius:999px;padding:0 14px;font-size:13px;white-space:nowrap}
 
     .letter-card{padding:12px}
     .letter-main{display:flex;align-items:center;justify-content:space-between;gap:16px}
-    .nav{width:48px;height:48px;padding:0;font-size:1.65rem;line-height:1}
+    .nav{width:clamp(42px,12vw,48px);height:clamp(42px,12vw,48px);min-height:0;padding:0;font-size:clamp(1.35rem,6vw,1.65rem);line-height:1;flex:0 0 auto}
     .center{text-align:center;min-width:0}
     .current-label{font-size:12px;color:var(--muted)}
-    .letter-display{font-size:46px;line-height:1;font-weight:700;margin-top:5px}
+    .letter-display{font-size:clamp(42px,12vw,52px);line-height:1;font-weight:700;margin-top:5px}
     .letter-display.cursive{
       font-family:"Snell Roundhand","Apple Chancery","Segoe Script","Brush Script MT",cursive;
-      font-size:66px;
+      font-size:clamp(54px,16vw,66px);
       font-weight:500;
     }
 
     .count{margin-top:8px;font-size:14px;color:var(--muted)}
-    .alphabet{display:flex;gap:8px;overflow-x:auto;padding-top:16px;padding-bottom:2px;scrollbar-width:thin}
-    .alpha{min-width:46px;height:40px;flex:0 0 auto;padding:0 10px;font-size:.88rem}
+    .alphabet{display:flex;gap:clamp(6px,2vw,8px);overflow-x:auto;padding-top:14px;padding-bottom:4px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+    .alpha{min-width:40px;width:40px;height:38px;min-height:38px;flex:0 0 auto;padding:0 6px;font-size:13px}
     .alpha.cursive{
       font-family:"Snell Roundhand","Apple Chancery","Segoe Script","Brush Script MT",cursive;
       font-size:1.55rem;
       font-weight:500;
     }
 
-    .modes{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
-    .mode{width:100%;min-height:46px;border-radius:18px;padding:0 8px;font-size:.86rem}
+    .modes{display:grid;grid-template-columns:repeat(3,max-content);justify-content:start;align-items:center;gap:8px}
+    .mode{width:auto;min-width:0;min-height:38px;border-radius:999px;padding:0 15px;font-size:13px;white-space:nowrap}
 
     .practice{padding:12px;display:flex;flex-direction:column;align-items:center}
     .practice > .title,.practice > .status,.practice > .feedback-row{width:100%}
@@ -147,17 +153,19 @@
     .stroke-controls{
       display:flex;
       justify-content:center;
-      gap:6px;
-      flex-wrap:nowrap;
+      gap:8px;
+      flex-wrap:wrap;
       margin:12px 0;
-      width:100%;
+      width:auto;
+      max-width:100%;
     }
 
-    .stroke-control{min-width:0;flex:1 1 0;min-height:42px;padding:0 8px;font-size:.82rem}
+    .stroke-control{width:auto;min-width:88px;flex:0 0 auto;min-height:38px;padding:0 14px;font-size:13px;white-space:nowrap}
 
     .board{
       position:relative;
-      width:min(330px,100%);
+      width:100%;
+      max-width:330px;
       aspect-ratio:1/1;
       margin:0 auto;
       overflow:hidden;
@@ -170,8 +178,251 @@
     .board svg,.board canvas{position:absolute;inset:0;width:100%;height:100%}
     .feedback-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:14px}
     .feedback{font-size:14px;min-height:22px}
-    .clear{min-height:42px;padding:0 14px}
+    .clear{min-height:clamp(38px,10.5vw,42px);padding:0 clamp(10px,3vw,14px);font-size:clamp(.76rem,3.4vw,.9rem)}
     .footer-note{text-align:center;color:var(--muted);font-size:12px;padding:6px 0 12px}
+
+    @media (max-width:340px){
+      .app{padding:8px;gap:8px}
+      .topbar{gap:8px}
+      .subtitle{font-size:12px}
+      .lang-switch{padding:3px}
+      .lang{min-height:34px;padding:0 10px;font-size:.82rem}
+      .styles{grid-template-columns:repeat(2,max-content);gap:6px}
+      .style-btn{min-height:36px;padding:0 11px;font-size:12px}
+      .letter-card{padding:10px}
+      .letter-main{gap:10px}
+      .modes{grid-template-columns:repeat(3,max-content);gap:5px}
+      .mode{min-height:36px;padding:0 11px;font-size:12px}
+      .practice{padding:10px}
+      .stroke-controls{gap:6px;margin:10px 0}
+      .stroke-control{min-width:78px;min-height:36px;padding:0 10px;font-size:12px}
+      .feedback-row{gap:8px;margin-top:10px}
+    }
+
+    @media (max-width:300px){
+      .styles{grid-template-columns:max-content}
+      .modes{display:flex;flex-wrap:wrap;justify-content:flex-start}
+      .stroke-controls{justify-content:flex-start}
+    }
+  
+    /* ===== Critical grid overflow fix =====
+       The 26-letter horizontal strip must scroll inside 390px; it must not
+       enlarge the CSS grid's implicit column to its full intrinsic width. */
+    .app{
+      grid-template-columns:minmax(0, 1fr) !important;
+      overflow:hidden;
+    }
+
+    .app > *,
+    .topbar,
+    .styles,
+    .letter-card,
+    .letter-main,
+    .alphabet,
+    .modes,
+    .practice,
+    .stroke-controls,
+    .feedback-row{
+      min-width:0;
+      max-width:100%;
+    }
+
+    .letter-card,
+    .practice{
+      width:100%;
+    }
+
+    .alphabet{
+      width:100%;
+      overflow-x:auto;
+      overflow-y:hidden;
+      contain:inline-size;
+    }
+
+    .styles,
+    .modes{
+      width:max-content;
+      justify-self:start;
+    }
+
+    @media (max-width:340px){
+      .styles,
+      .modes{
+        width:100%;
+      }
+    }
+
+  
+
+    /* ===== Fluid viewport layout final ===== */
+    /*
+      The application now uses the full browser viewport.
+      It changes from one column to two columns according to available width,
+      while buttons remain compact instead of being enlarged with the page.
+    */
+    :root{
+      --page-pad:clamp(8px,1.2vw,20px);
+      --section-gap:clamp(8px,.9vw,14px);
+      --compact-h:clamp(36px,2.6vw,42px);
+      --compact-font:clamp(12px,.85vw,14px);
+    }
+
+    html,body{
+      width:100%;
+      max-width:100%;
+      min-width:0;
+      overflow-x:hidden;
+    }
+
+    body{min-height:100dvh}
+
+    .viewport-fit,
+    .scale-stage{
+      width:100% !important;
+      max-width:none !important;
+      min-width:0 !important;
+      height:auto !important;
+      margin:0 !important;
+      padding:0 !important;
+      transform:none !important;
+      overflow:visible !important;
+    }
+
+    .app{
+      width:100% !important;
+      max-width:none !important;
+      min-width:0 !important;
+      margin:0 !important;
+      padding:var(--page-pad) !important;
+      gap:var(--section-gap) !important;
+      display:grid !important;
+      grid-template-columns:minmax(0,1fr) !important;
+      grid-template-areas:
+        "header"
+        "styles"
+        "letters"
+        "modes"
+        "practice"
+        "footer";
+      align-items:start;
+      overflow:visible !important;
+    }
+
+    .topbar{grid-area:header}
+    .styles{grid-area:styles}
+    .letter-card{grid-area:letters}
+    .modes{grid-area:modes}
+    .practice{grid-area:practice}
+    .footer-note{grid-area:footer}
+
+    .styles,
+    .modes{
+      display:flex !important;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-start !important;
+      width:auto !important;
+      max-width:100% !important;
+      gap:clamp(6px,.7vw,10px) !important;
+      justify-self:start;
+    }
+
+    .style-btn,
+    .mode,
+    .stroke-control{
+      width:auto !important;
+      min-width:0 !important;
+      min-height:var(--compact-h) !important;
+      padding:0 clamp(11px,1vw,16px) !important;
+      border-radius:999px !important;
+      font-size:var(--compact-font) !important;
+      line-height:1 !important;
+      white-space:nowrap;
+      flex:0 0 auto !important;
+    }
+
+    .stroke-controls{
+      display:flex !important;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:center !important;
+      width:auto !important;
+      max-width:100% !important;
+      gap:clamp(6px,.7vw,10px) !important;
+      margin:clamp(10px,1vw,14px) auto !important;
+      align-self:center;
+    }
+
+    .letter-card,
+    .practice{
+      width:100% !important;
+      max-width:none !important;
+      min-width:0;
+    }
+
+    .letter-card{padding:clamp(10px,1vw,16px)}
+    .practice{padding:clamp(10px,1.1vw,18px)}
+
+    .alphabet{
+      width:100% !important;
+      max-width:100% !important;
+      min-width:0;
+      overflow-x:auto;
+      overflow-y:hidden;
+      contain:inline-size;
+    }
+
+    /* One-column phones/tablets use most of the available screen width. */
+    .board{
+      width:min(100%,88vmin,760px) !important;
+      max-width:none !important;
+      margin-inline:auto !important;
+    }
+
+    .feedback-row{
+      max-width:900px;
+      margin-inline:auto;
+    }
+
+    /* Landscape tablets and desktops become a fluid two-column workspace. */
+    @media (min-width:900px){
+      .app{
+        grid-template-columns:minmax(300px,36%) minmax(0,1fr) !important;
+        grid-template-areas:
+          "header header"
+          "styles modes"
+          "letters practice"
+          "footer footer";
+      }
+
+      .letter-card{align-self:start}
+      .practice{min-height:calc(100dvh - 150px)}
+      .board{width:min(100%,clamp(360px,52vmin,760px)) !important}
+    }
+
+    @media (min-width:1180px){
+      .app{grid-template-columns:minmax(330px,430px) minmax(0,1fr) !important}
+      .board{width:min(100%,clamp(430px,56vmin,820px)) !important}
+    }
+
+    @media (min-width:1800px){
+      .app{grid-template-columns:minmax(380px,500px) minmax(0,1fr) !important}
+      .board{width:min(100%,clamp(520px,52vmin,900px)) !important}
+    }
+
+    @media (max-width:420px){
+      .topbar{gap:8px}
+      .styles,.modes{width:100% !important}
+      .style-btn,.mode{padding-inline:10px !important}
+      .stroke-controls{width:100% !important}
+      .stroke-control{
+        flex:1 1 0 !important;
+        min-width:82px !important;
+        padding-inline:6px !important;
+      }
+      .board{width:100% !important}
+    }
+
   </style>
 </head>
 
@@ -249,8 +500,88 @@
     </div>
   </div>
 
-  <!-- 正式印刷體 52 字母筆順資料庫 -->
-  <script src="qletter-print-strokes-v1.js"></script>
+  <!-- 正式印刷體 52 字母筆順資料庫：已內嵌，無需外部 JS 檔 -->
+  <script>
+// qLetter Print Manuscript Stroke Database v1
+// Coordinate system: 600 x 600
+// Teaching model: consistent print/manuscript letter formation.
+// Each SVG path is one pen stroke, in teaching order.
+// NOTE: English handwriting has no single worldwide official stroke-order standard.
+
+const QLETTER_PRINT_STROKES = {
+  meta: {
+    version: "1.0.0",
+    viewBox: "0 0 600 600",
+    style: "print-manuscript",
+    sourceBasis: [
+      "Zaner-Bloser manuscript stroke-family principles",
+      "Learning Without Tears letter-formation principles"
+    ]
+  },
+
+  upper: {
+    A: ["M300 85 L150 510", "M300 85 L450 510", "M215 325 L385 325"],
+    B: ["M160 85 L160 510", "M160 85 C390 75 420 175 390 260 C360 305 270 305 160 305", "M160 305 C410 290 435 420 385 485 C350 515 260 510 160 510"],
+    C: ["M455 145 C405 85 295 65 215 115 C125 170 105 370 205 465 C280 535 405 505 460 445"],
+    D: ["M155 85 L155 510", "M155 85 C390 80 470 180 470 295 C470 425 375 510 155 510"],
+    E: ["M155 85 L155 510", "M155 85 L430 85", "M155 295 L370 295", "M155 510 L430 510"],
+    F: ["M155 85 L155 510", "M155 85 L430 85", "M155 295 L365 295"],
+    G: ["M455 145 C405 85 295 65 215 115 C125 170 105 370 205 465 C280 535 405 505 460 445", "M460 445 L460 325 L330 325"],
+    H: ["M155 85 L155 510", "M445 85 L445 510", "M155 295 L445 295"],
+    I: ["M180 85 L420 85", "M300 85 L300 510", "M180 510 L420 510"],
+    J: ["M185 85 L445 85", "M385 85 L385 410 C385 495 310 525 245 500 C205 485 180 450 180 415"],
+    K: ["M160 85 L160 510", "M440 85 L160 310", "M225 255 L455 510"],
+    L: ["M160 85 L160 510", "M160 510 L445 510"],
+    M: ["M145 510 L145 85", "M145 85 L300 300", "M300 300 L455 85", "M455 85 L455 510"],
+    N: ["M150 510 L150 85", "M150 85 L450 510", "M450 510 L450 85"],
+    O: ["M300 80 C170 80 120 175 120 300 C120 430 185 520 300 520 C415 520 480 430 480 300 C480 175 430 80 300 80 Z"],
+    P: ["M160 510 L160 85", "M160 85 C405 75 430 185 390 260 C355 315 260 310 160 310"],
+    Q: ["M300 80 C170 80 120 175 120 300 C120 430 185 520 300 520 C415 520 480 430 480 300 C480 175 430 80 300 80 Z", "M335 385 L465 520"],
+    R: ["M160 510 L160 85", "M160 85 C405 75 430 185 390 260 C355 315 260 310 160 310", "M300 310 L455 510"],
+    S: ["M450 145 C410 95 350 75 285 85 C185 100 140 165 160 230 C180 295 245 310 325 325 C410 340 455 385 440 445 C420 515 315 535 230 500 C190 485 160 460 145 435"],
+    T: ["M145 85 L455 85", "M300 85 L300 510"],
+    U: ["M150 85 L150 390 C150 475 205 520 300 520 C395 520 450 475 450 390 L450 85"],
+    V: ["M145 85 L300 510", "M300 510 L455 85"],
+    W: ["M120 85 L205 510", "M205 510 L300 270", "M300 270 L395 510", "M395 510 L480 85"],
+    X: ["M155 85 L445 510", "M445 85 L155 510"],
+    Y: ["M145 85 L300 300", "M455 85 L300 300", "M300 300 L300 510"],
+    Z: ["M145 85 L455 85", "M455 85 L145 510", "M145 510 L455 510"]
+  },
+
+  lower: {
+    a: ["M385 280 C350 245 295 235 250 255 C185 285 165 385 205 445 C240 500 330 500 385 445 C410 420 420 390 420 355", "M420 260 L420 475"],
+    b: ["M175 85 L175 475", "M175 320 C210 255 320 235 385 285 C445 330 445 425 380 470 C315 515 215 490 175 430"],
+    c: ["M420 295 C380 245 305 235 250 270 C185 310 175 415 240 465 C295 510 380 495 420 450"],
+    d: ["M420 85 L420 475", "M420 320 C385 255 275 235 210 285 C150 330 150 425 215 470 C280 515 380 490 420 430"],
+    e: ["M195 365 L425 365", "M425 365 C420 295 375 250 310 250 C225 250 180 315 185 385 C190 470 270 510 345 490 C385 480 410 460 430 435"],
+    f: ["M365 115 C320 80 255 100 245 160 L245 475", "M165 275 L350 275"],
+    g: ["M400 275 C360 245 300 240 250 270 C180 310 170 410 230 460 C285 505 360 485 400 440", "M400 275 L400 500 C400 575 345 610 280 585 C245 572 220 550 210 525"],
+    h: ["M180 85 L180 475", "M180 330 C220 250 335 235 390 295 C420 325 420 365 420 475"],
+    i: ["M295 270 L295 475", "M295 205 L295 205"],
+    j: ["M330 270 L330 505 C330 565 295 590 250 575 C225 565 210 545 205 525", "M330 205 L330 205"],
+    k: ["M180 85 L180 475", "M410 260 L180 385", "M275 335 L430 475"],
+    l: ["M300 85 L300 475"],
+    m: ["M145 275 L145 475", "M145 335 C175 260 255 245 300 300 C315 320 315 350 315 475", "M315 335 C345 260 425 245 470 300 C485 320 485 350 485 475"],
+    n: ["M175 275 L175 475", "M175 335 C210 255 325 245 390 300 C420 325 420 365 420 475"],
+    o: ["M300 245 C210 245 165 305 165 375 C165 450 215 500 300 500 C385 500 435 450 435 375 C435 305 390 245 300 245 Z"],
+    p: ["M175 275 L175 590", "M175 330 C215 255 325 245 390 300 C450 350 440 445 375 480 C310 515 215 485 175 425"],
+    q: ["M425 330 C385 255 275 245 210 300 C150 350 160 445 225 480 C290 515 385 485 425 425", "M425 275 L425 590"],
+    r: ["M190 275 L190 475", "M190 335 C225 270 300 245 365 275"],
+    s: ["M410 290 C375 255 315 245 265 260 C215 275 195 310 210 340 C225 370 270 375 325 385 C390 395 420 425 405 455 C385 495 315 505 255 485 C225 475 205 460 190 440"],
+    t: ["M300 145 L300 430 C300 475 330 495 375 485", "M215 275 L385 275"],
+    u: ["M180 275 L180 410 C180 470 225 500 280 495 C340 490 385 450 405 395", "M405 275 L405 475"],
+    v: ["M170 275 L300 475", "M300 475 L430 275"],
+    w: ["M125 275 L215 475", "M215 475 L300 325", "M300 325 L385 475", "M385 475 L475 275"],
+    x: ["M180 275 L420 475", "M420 275 L180 475"],
+    y: ["M170 275 L300 475", "M430 275 L295 515 C265 565 235 585 200 575"],
+    z: ["M180 275 L420 275", "M420 275 L180 475", "M180 475 L420 475"]
+  }
+};
+
+if (typeof window !== "undefined") window.QLETTER_PRINT_STROKES = QLETTER_PRINT_STROKES;
+if (typeof module !== "undefined" && module.exports) module.exports = QLETTER_PRINT_STROKES;
+
+</script>
 
   <script>
   (() => {
@@ -466,7 +797,6 @@
 
       buildAlphabet();
       scene();
-      scheduleLeftScale();
     }
 
     function clearDrawing(){
@@ -662,46 +992,8 @@
       document.getElementById('feedback').textContent=text[lang].ready;
     });
 
-    const MASTER_WIDTH=390;
-
-    function scaleFromLeft(){
-      const fit=document.getElementById('viewportFit');
-      const stage=document.getElementById('scaleStage');
-      const app=document.getElementById('app');
-      if(!fit||!stage||!app)return;
-
-      stage.style.transform='scale(1)';
-      fit.style.width=MASTER_WIDTH+'px';
-      fit.style.height='auto';
-
-      const naturalHeight=Math.ceil(app.offsetHeight);
-      const vw=window.innerWidth||document.documentElement.clientWidth||MASTER_WIDTH;
-
-      let scale=vw/MASTER_WIDTH;
-      scale=Math.max(0.5,Math.min(scale,2.2));
-
-      stage.style.transformOrigin='top left';
-      stage.style.transform=`scale(${scale})`;
-
-      fit.style.width=`${Math.ceil(MASTER_WIDTH*scale)}px`;
-      fit.style.height=`${Math.ceil(naturalHeight*scale)}px`;
-    }
-
-    let leftScaleRAF=0;
-
-    function scheduleLeftScale(){
-      cancelAnimationFrame(leftScaleRAF);
-      leftScaleRAF=requestAnimationFrame(scaleFromLeft);
-    }
-
-    window.addEventListener('resize',scheduleLeftScale);
-    if(window.visualViewport){
-      window.visualViewport.addEventListener('resize',scheduleLeftScale);
-    }
-
     applyText();
     render();
-    scheduleLeftScale();
   })();
   </script>
 </body>
